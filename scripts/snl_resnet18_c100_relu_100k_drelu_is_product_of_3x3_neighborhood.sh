@@ -10,6 +10,7 @@ LR=1e-3
 THRESHOLD=1e-2
 ALPHA=1e-5
 BATCH=128
-BLOCK_TYPE=LearnableAlpha
+BLOCK_TYPE=LearnableAlphaWithEpsilon
+
 python3 snl_finetune_unstructured.py "$DATASET" "$ARCH" "$SAVEDIR" "$MODELDIR" --relu_budget $RELU_BUDGET --alpha $ALPHA --lr $LR --threshold $THRESHOLD --batch $BATCH --logname "$LOGNAME" --finetune_epochs $FINETUNE_EPOCH --block_type "$BLOCK_TYPE"
 

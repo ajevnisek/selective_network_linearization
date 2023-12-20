@@ -56,6 +56,7 @@ parser.add_argument('--print-freq', default=100, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
 parser.add_argument('--block_type', type=str, default='LearnableAlpha')
+parser.add_argument('--num_of_neighbors', type=int, default=4)
 args = parser.parse_args()
 
 if args.budegt_type == 'relative' and args.relu_budget > 1:
@@ -84,6 +85,8 @@ def main():
     log(logfilename, "Learning Rate: {:}".format(args.lr))
     log(logfilename, "Alpha: {:}".format(args.alpha))
     log(logfilename, "ReLU Budget: {:}".format(args.relu_budget))
+    log(logfilename, "Block Type: {:}".format(args.block_type))
+    log(logfilename, "Num of Neighbours: {:}".format(args.num_of_neighbors if args.block_type != 'LearnableAlpha' else 0))
 
     train_dataset = get_dataset(args.dataset, 'train')
     test_dataset = get_dataset(args.dataset, 'test')

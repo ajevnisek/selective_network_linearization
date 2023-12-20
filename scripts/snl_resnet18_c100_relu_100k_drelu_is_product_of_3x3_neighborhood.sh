@@ -3,14 +3,14 @@ ARCH=resnet18_in
 RELU_BUDGET=100000
 FINETUNE_EPOCH=100
 EPOCHS=2000
+BLOCK_TYPE=LearnableAlphaWithEpsilon
+NUMBER_OF_NEIGHBORS=8
 MODELDIR=./pretrained_models/cifar100/resnet18_in/best_checkpoint.pth.tar
 LOGNAME=resnet18_in_unstructured_$RELU_BUDGET.txt
-SAVEDIR=./snl_output/cifar100/$RELU_BUDGET/$ARCH/
+SAVEDIR=./snl_output/cifar100/$RELU_BUDGET/$ARCH/$BLOCK_TYPE/num_neighbors_$NUMBER_OF_NEIGHBORS/
 LR=1e-3
 THRESHOLD=1e-2
 ALPHA=1e-5
 BATCH=128
-BLOCK_TYPE=LearnableAlphaWithEpsilon
 
-python3 snl_finetune_unstructured.py "$DATASET" "$ARCH" "$SAVEDIR" "$MODELDIR" --relu_budget $RELU_BUDGET --alpha $ALPHA --lr $LR --threshold $THRESHOLD --batch $BATCH --logname "$LOGNAME" --finetune_epochs $FINETUNE_EPOCH --block_type "$BLOCK_TYPE"
-
+python3 snl_finetune_unstructured.py "$DATASET" "$ARCH" "$SAVEDIR" "$MODELDIR" --relu_budget $RELU_BUDGET --alpha $ALPHA --lr $LR --threshold $THRESHOLD --batch $BATCH --logname "$LOGNAME" --finetune_epochs $FINETUNE_EPOCH --block_type "$BLOCK_TYPE" --num_of_neighbors $NUMBER_OF_NEIGHBORS

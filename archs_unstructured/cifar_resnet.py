@@ -9,6 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 import torch.nn.init as init
+from torch.nn import ConstantPad2d
 from .init_utils import weights_init
 
 from torch.autograd import Variable
@@ -71,6 +72,117 @@ class LearnableAlpha(nn.Module):
         out = F.relu(x) * self.alphas.expand_as(x) + (1-self.alphas.expand_as(x)) * x 
         return out
 
+
+class LearnableAlphaWithEpsilon(nn.Module):
+    def __init__(self, out_channel, feature_size, epsilon, num_of_neighbors: int = 4):
+        super(LearnableAlphaWithEpsilon, self).__init__()
+        self.epsilon = epsilon
+        self.alphas = nn.Parameter(torch.ones(1, out_channel, feature_size, feature_size), requires_grad=True)
+        self.product_function = {4: self.calculate_product_for_four_neighbors,
+                                 8: self.calculate_product_for_eight_neighbors}[num_of_neighbors]
+
+    @staticmethod
+    def calculate_product_for_four_neighbors(our_drelu, alphas):
+        """Calculate the product of the DReLUs of a pixel and its four spatially nearest neighbors.
+
+        We follow the following convention for the naming of the pixels surrounding the pixel X:
+            ╔═══════════╗
+            ║ A ║ B ║ C ║
+            ╟───────────╢
+            ║ D ║ X ║ E ║
+            ╟───────────╢
+            ║ F ║ G ║ H ║
+            ╚═══════════╝
+        We calculate the following equation:
+        \prod_j (1-\alpha_j) \cdot \text{Our-DReLU}(x_j)
+
+
+        """
+
+        padding_left, padding_right, padding_top, padding_bottom = (0, 0, 1, 0)
+        B = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :-1, :] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :-1, :])
+
+        padding_left, padding_right, padding_top, padding_bottom = (1, 0, 0, 0)
+        D = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :, :-1] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :, :-1])
+        X = our_drelu * (1.0 - alphas)
+        padding_left, padding_right, padding_top, padding_bottom = (0, 1, 0, 0)
+        E = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :, 1:] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :, 1:])
+
+        padding_left, padding_right, padding_top, padding_bottom = (0, 0, 0, 1)
+        G = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., 1:, :] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., 1:, :])
+
+        product = B * D * X * G
+        return product
+
+    @staticmethod
+    def calculate_product_for_eight_neighbors(our_drelu, alphas):
+        """Calculate the product of the DReLUs of a pixel and its eight spatially nearest neighbors.
+
+        We follow the following convention for the naming of the pixels surrounding the pixel X:
+            ╔═══════════╗
+            ║ A ║ B ║ C ║
+            ╟───────────╢
+            ║ D ║ X ║ E ║
+            ╟───────────╢
+            ║ F ║ G ║ H ║
+            ╚═══════════╝
+        We calculate the following equation:
+        \prod_j (1-\alpha_j) \cdot \text{Our-DReLU}(x_j)
+
+                """
+        padding_left, padding_right, padding_top, padding_bottom = (1, 0, 1, 0)
+        A = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :-1 , :-1] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 -  alphas)[..., :-1 , :-1])
+        padding_left, padding_right, padding_top, padding_bottom = (0, 0, 1, 0)
+        B = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :-1, :] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :-1, :])
+        padding_left, padding_right, padding_top, padding_bottom = (0, 1, 1, 0)
+        C = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :-1 , 1:] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :-1, 1:])
+        padding_left, padding_right, padding_top, padding_bottom = (1, 0, 0, 0)
+        D = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :, :-1] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :, :-1])
+        X = our_drelu * (1.0 - alphas)
+        padding_left, padding_right, padding_top, padding_bottom = (0, 1, 0, 0)
+        E = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :, 1:] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :, 1:])
+        padding_left, padding_right, padding_top, padding_bottom = (1, 0, 0, 1)
+        F = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., :-1, 1:] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., :-1, 1:])
+        padding_left, padding_right, padding_top, padding_bottom = (0, 0, 0, 1)
+        G = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., 1:, :] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., 1:, :])
+        padding_left, padding_right, padding_top, padding_bottom = (0, 1, 0, 1)
+        H = (ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(our_drelu)[..., 1:, 1:] *
+             ConstantPad2d((padding_left, padding_right, padding_top, padding_bottom), 1)(
+                 1.0 - alphas)[..., 1:, 1:])
+        product = A * B * C * D * X * E * F * G * H
+        return product
+
+    def forward(self, x):
+        which_drelus_we_calculate = (self.alphas.expand_as(x) > self.epsilon).float()
+        our_drelu = which_drelus_we_calculate * (x > 0).float() + 1 * (1.0 -  which_drelus_we_calculate)
+        product = self.product_function(our_drelu, self.alphas.expand_as(x))
+        out = product * x
+        return out
+
+
+
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -110,16 +222,20 @@ class BasicBlock(nn.Module):
 class BasicBlock_IN(nn.Module):
     expansion = 1
 
-    def __init__(self, in_planes, planes, stride, feature_size):
+    def __init__(self, in_planes, planes, stride, feature_size, args):
         super(BasicBlock_IN, self).__init__()
         self.conv1 = nn.Conv2d(
             in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
-        self.alpha1 = LearnableAlpha(planes, feature_size)
+        self.alpha1 = {'LearnableAlpha': LearnableAlpha(planes, feature_size),
+                       'LearnableAlphaWithEpsilon': LearnableAlphaWithEpsilon(planes, feature_size, epsilon=args.threshold, num_of_neighbors=args.num_of_neighbors)
+                       }[args.block_type]
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=3,
                                stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(planes)
-        self.alpha2 = LearnableAlpha(planes, feature_size)
+        self.alpha2 = {'LearnableAlpha': LearnableAlpha(planes, feature_size),
+                       'LearnableAlphaWithEpsilon': LearnableAlphaWithEpsilon(planes, feature_size, epsilon=args.threshold, num_of_neighbors=args.num_of_neighbors)
+                       }[args.block_type]
 
         self.shortcut = nn.Sequential()
         if stride != 1 or in_planes != self.expansion*planes:
@@ -138,6 +254,8 @@ class BasicBlock_IN(nn.Module):
         # out = F.relu(out)
         out = self.alpha2(out)
         return out
+
+
 
 class ResNet_IN(nn.Module):
     def __init__(self, block, num_blocks, args, num_classes=10):
@@ -158,21 +276,21 @@ class ResNet_IN(nn.Module):
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=args.stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         # self.alpha = LearnableAlpha(64)
-        self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)
-        self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
-        self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
-        self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)
+        self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1, args=args)
+        self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2, args=args)
+        self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2, args=args)
+        self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2, args=args)
         self.linear = nn.Linear(512*block.expansion, num_classes)
 
         self.apply(_weights_init)
 
         
-    def _make_layer(self, block, planes, num_blocks, stride):
+    def _make_layer(self, block, planes, num_blocks, stride, args):
         strides = [stride] + [1]*(num_blocks-1)
         layers = []
         for stride in strides:
             self.feature_size = self.feature_size // 2 if stride == 2 else self.feature_size
-            layers.append(block(self.in_planes, planes, stride, self.feature_size))
+            layers.append(block(self.in_planes, planes, stride, self.feature_size, args=args))
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 

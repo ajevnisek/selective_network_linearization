@@ -55,6 +55,7 @@ parser.add_argument('--gpu', default=0, type=int,
 parser.add_argument('--print-freq', default=100, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
+parser.add_argument('--block_type', type=str, default='LearnableAlpha')
 args = parser.parse_args()
 
 if args.budegt_type == 'relative' and args.relu_budget > 1:

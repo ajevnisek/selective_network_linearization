@@ -6,3 +6,6 @@ __pycache__/
 pretrained_models
 snl_output/
 *.pkl
+retraining_after_alpha_thresholding/
+/snl_output2/
+/induce_prototypes/

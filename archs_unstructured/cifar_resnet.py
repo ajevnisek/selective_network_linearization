@@ -77,7 +77,7 @@ class LearnableAlphaWithEpsilon(nn.Module):
     def __init__(self, out_channel, feature_size, epsilon, num_of_neighbors: int = 4):
         super(LearnableAlphaWithEpsilon, self).__init__()
         self.epsilon = epsilon
-        self.alphas = nn.Parameter(torch.ones(1, out_channel, feature_size, feature_size), requires_grad=True)
+        self.alphas = nn.Parameter(torch.zeros(1, out_channel, feature_size, feature_size), requires_grad=True)
         self.product_function = {4: self.calculate_product_for_four_neighbors,
                                  8: self.calculate_product_for_eight_neighbors}[num_of_neighbors]
 

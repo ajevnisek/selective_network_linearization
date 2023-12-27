@@ -73,11 +73,81 @@ class LearnableAlpha(nn.Module):
         return out
 
 
+class LearnableAlphaAndBeta(nn.Module):
+    def __init__(self, out_channel, feature_size):
+        super(LearnableAlphaAndBeta, self).__init__()
+        self.alphas = nn.Parameter(torch.ones(1, out_channel, feature_size, feature_size), requires_grad=True)
+        self.beta = nn.Parameter(torch.cat(
+            [
+                # betas are at the argument of a sigmoid, therefore we need to initialize them with A and -A.
+                # This A should be large enough if we want to get 1 and 0. Otherwise, since we sum over H*W elements,
+                # small fractions close to 0 add up.
+                torch.eye(feature_size * feature_size, feature_size * feature_size).unsqueeze(0) * 30 - 15
+            ] * out_channel, 0),
+            requires_grad=True)
+        self.feature_size = feature_size
+
+    def forward(self, x):
+        B, C = x.shape[0], x.shape[1]
+        drelu_x = (x > 0).float()
+        per_channel_beta_times_alpha_times_drelu_and_sum = []
+        for channel in range(C):
+            # we want to repeat alpha to be the shape of beta (duplicate it over the rows)
+            alpha_expanded = self.alphas[:, channel, :, :].flatten(-2).expand_as(self.beta[channel])
+            # then we want to calculate the elementwise product to achieve b_{ij} * a_{j}
+            beta_times_alpha = torch.nn.Sigmoid()(self.beta[channel]) * alpha_expanded
+            # finally we want to evaluate the sum of the elemetwise product with d_{j}, that is:
+            # sum( b_{ij} * a_{j} * d_{j} ) * x_{j})
+            beta_times_alpha_times_drelu = (beta_times_alpha @ drelu_x[..., channel, :, :].flatten(-2).T).T # / self.feature_size / self.feature_size
+            # then we want to reshape this result and add it to the list...
+            beta_times_alpha_times_drelu_as_x_shape = beta_times_alpha_times_drelu.reshape(B, 1, self.feature_size, self.feature_size)
+            per_channel_beta_times_alpha_times_drelu_and_sum.append(beta_times_alpha_times_drelu_as_x_shape)
+        new_drelu = torch.cat(per_channel_beta_times_alpha_times_drelu_and_sum, 1)
+        new_relu = new_drelu * x
+        out = new_relu #+ 0.05 * x
+        return out
+
+
+class LearnableAlphaAndBetaNoSigmoid(nn.Module):
+    def __init__(self, out_channel, feature_size):
+        super(LearnableAlphaAndBetaNoSigmoid, self).__init__()
+        self.alphas = nn.Parameter(torch.ones(1, out_channel, feature_size, feature_size), requires_grad=True)
+        self.beta = nn.Parameter(torch.cat(
+            [
+                # betas are now linear
+                torch.eye(feature_size * feature_size, feature_size * feature_size).unsqueeze(0) * 1
+            ] * out_channel, 0),
+            requires_grad=True)
+        self.feature_size = feature_size
+
+    def forward(self, x):
+        B, C = x.shape[0], x.shape[1]
+        drelu_x = (x > 0).float()
+        per_channel_beta_times_alpha_times_drelu_and_sum = []
+        for channel in range(C):
+            # we want to repeat alpha to be the shape of beta (duplicate it over the rows)
+            alpha_expanded = self.alphas[:, channel, :, :].flatten(-2).expand_as(self.beta[channel])
+            # then we want to calculate the elementwise product to achieve b_{ij} * a_{j}
+            beta_times_alpha = self.beta[channel] * alpha_expanded
+            # finally we want to evaluate the sum of the elemetwise product with d_{j}, that is:
+            # sum( b_{ij} * a_{j} * d_{j} ) * x_{j})
+            beta_times_alpha_times_drelu = (beta_times_alpha @ drelu_x[..., channel, :, :].flatten(-2).T).T  # / self.feature_size / self.feature_size
+            # then we want to reshape this result and add it to the list...
+            beta_times_alpha_times_drelu_as_x_shape = beta_times_alpha_times_drelu.reshape(B, 1, self.feature_size,
+                                                                                           self.feature_size)
+            per_channel_beta_times_alpha_times_drelu_and_sum.append(beta_times_alpha_times_drelu_as_x_shape)
+        new_drelu = torch.cat(per_channel_beta_times_alpha_times_drelu_and_sum, 1)
+        new_relu = new_drelu * x
+        out = new_relu # + 0.05 * x
+        return out
+
+
+
 class LearnableAlphaWithEpsilon(nn.Module):
     def __init__(self, out_channel, feature_size, epsilon, num_of_neighbors: int = 4):
         super(LearnableAlphaWithEpsilon, self).__init__()
         self.epsilon = epsilon
-        self.alphas = nn.Parameter(torch.zeros(1, out_channel, feature_size, feature_size), requires_grad=True)
+        self.alphas = nn.Parameter(torch.ones(1, out_channel, feature_size, feature_size) * 0.5, requires_grad=True)
         self.product_function = {4: self.calculate_product_for_four_neighbors,
                                  8: self.calculate_product_for_eight_neighbors}[num_of_neighbors]
 
@@ -228,13 +298,17 @@ class BasicBlock_IN(nn.Module):
             in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
         self.alpha1 = {'LearnableAlpha': LearnableAlpha(planes, feature_size),
-                       'LearnableAlphaWithEpsilon': LearnableAlphaWithEpsilon(planes, feature_size, epsilon=args.threshold, num_of_neighbors=args.num_of_neighbors)
+                       'LearnableAlphaWithEpsilon': LearnableAlphaWithEpsilon(planes, feature_size, epsilon=args.threshold, num_of_neighbors=args.num_of_neighbors),
+                       'LearnableAlphaAndBeta': LearnableAlphaAndBeta(planes, feature_size),
+                       'LearnableAlphaAndBetaNoSigmoid': LearnableAlphaAndBetaNoSigmoid(planes, feature_size),
                        }[args.block_type]
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=3,
                                stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(planes)
         self.alpha2 = {'LearnableAlpha': LearnableAlpha(planes, feature_size),
-                       'LearnableAlphaWithEpsilon': LearnableAlphaWithEpsilon(planes, feature_size, epsilon=args.threshold, num_of_neighbors=args.num_of_neighbors)
+                       'LearnableAlphaWithEpsilon': LearnableAlphaWithEpsilon(planes, feature_size, epsilon=args.threshold, num_of_neighbors=args.num_of_neighbors),
+                       'LearnableAlphaAndBeta': LearnableAlphaAndBeta(planes, feature_size),
+                       'LearnableAlphaAndBetaNoSigmoid': LearnableAlphaAndBetaNoSigmoid(planes, feature_size),
                        }[args.block_type]
 
         self.shortcut = nn.Sequential()
@@ -261,7 +335,7 @@ class ResNet_IN(nn.Module):
     def __init__(self, block, num_blocks, args, num_classes=10):
         super(ResNet_IN, self).__init__()
         self.in_planes = 64
-        if args.dataset in ['cifar10', 'cifar100']:
+        if args.dataset in ['cifar10', 'cifar100', "cifar100-new-split"]:
             self.feature_size = 32
             self.last_dim = 4
             print("CIFAR10/100 Setting")

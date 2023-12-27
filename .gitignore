@@ -9,3 +9,7 @@ snl_output/
 retraining_after_alpha_thresholding/
 /snl_output2/
 /induce_prototypes/
+/associate_prototypes/
+docker_outputs
+cifar100-new-split
+cifar100-new-split-val

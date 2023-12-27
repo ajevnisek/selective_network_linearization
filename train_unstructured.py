@@ -42,7 +42,9 @@ parser.add_argument('--gpu', default=0, type=int,
 parser.add_argument('--print-freq', default=200, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
-
+parser.add_argument('--threshold', type=float, default=0.1)
+parser.add_argument('--block_type', type=str, default='LearnableAlpha')
+parser.add_argument('--num_of_neighbors', type=int, default=4)
 args = parser.parse_args()
 
 

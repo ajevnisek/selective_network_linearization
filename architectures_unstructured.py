@@ -20,7 +20,7 @@ def get_architecture(arch: str, dataset: str, device, args) -> torch.nn.Module:
 
     if arch == "resnet9_in" and dataset == "cifar100":
         model = resnet9_in(num_classes=100, args=args).to(device)
-    elif arch == "resnet18_in" and dataset == "cifar100":
+    elif arch == "resnet18_in" and dataset in ["cifar100", "cifar100-new-split"]:
         model = resnet18_in(num_classes=100, args=args).to(device)
     elif arch == "resnet18_in" and dataset == "cifar10":
         model = resnet18_in(num_classes=10, args=args).to(device)

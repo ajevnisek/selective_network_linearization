@@ -1,0 +1,9 @@
+.idea/
+__pycache__/
+checkpoints
+snl_output
+snl_output2
+retraining_after_alpha_thresholding
+associate_prototypes
+pretrained_models
+docker_outputs

@@ -1,0 +1,840 @@
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Epochs: 0	Test Acc: 65.2	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 1	Test Acc: 67.61	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 2	Test Acc: 68.61	Relu Count: 481379	Alpha: 0.000010	
+Epochs: 3	Test Acc: 70.83	Relu Count: 474882	Alpha: 0.000010	
+Epochs: 4	Test Acc: 70.82	Relu Count: 469526	Alpha: 0.000010	
+Epochs: 5	Test Acc: 71.16	Relu Count: 464222	Alpha: 0.000010	
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Epochs: 0	Test Acc: 64.38	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 1	Test Acc: 67.75	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 2	Test Acc: 68.74	Relu Count: 482338	Alpha: 0.000010	
+Epochs: 3	Test Acc: 70.16	Relu Count: 475713	Alpha: 0.000010	
+Epochs: 4	Test Acc: 70.56	Relu Count: 469685	Alpha: 0.000010	
+Epochs: 5	Test Acc: 71.73	Relu Count: 464303	Alpha: 0.000010	
+Epochs: 6	Test Acc: 71.54	Relu Count: 458530	Alpha: 0.000010	
+Epochs: 7	Test Acc: 72.06	Relu Count: 452507	Alpha: 0.000010	
+Epochs: 8	Test Acc: 72.01	Relu Count: 445854	Alpha: 0.000010	
+Epochs: 9	Test Acc: 72.24	Relu Count: 438467	Alpha: 0.000010	
+Epochs: 10	Test Acc: 72.93	Relu Count: 430847	Alpha: 0.000010	
+Epochs: 11	Test Acc: 72.6	Relu Count: 422365	Alpha: 0.000010	
+Epochs: 12	Test Acc: 72.46	Relu Count: 413307	Alpha: 0.000010	
+Epochs: 13	Test Acc: 73.0	Relu Count: 403962	Alpha: 0.000010	
+Epochs: 14	Test Acc: 73.23	Relu Count: 394034	Alpha: 0.000010	
+Epochs: 15	Test Acc: 73.43	Relu Count: 383937	Alpha: 0.000010	
+Epochs: 16	Test Acc: 73.79	Relu Count: 374265	Alpha: 0.000010	
+Epochs: 17	Test Acc: 73.58	Relu Count: 365428	Alpha: 0.000010	
+Epochs: 18	Test Acc: 73.76	Relu Count: 356927	Alpha: 0.000010	
+Epochs: 19	Test Acc: 73.26	Relu Count: 348870	Alpha: 0.000010	
+Epochs: 20	Test Acc: 73.15	Relu Count: 340837	Alpha: 0.000010	
+Epochs: 21	Test Acc: 73.52	Relu Count: 333279	Alpha: 0.000010	
+Epochs: 22	Test Acc: 74.03	Relu Count: 325802	Alpha: 0.000010	
+Epochs: 23	Test Acc: 73.44	Relu Count: 318630	Alpha: 0.000010	
+Epochs: 24	Test Acc: 74.01	Relu Count: 311762	Alpha: 0.000010	
+Epochs: 25	Test Acc: 73.06	Relu Count: 305232	Alpha: 0.000010	
+Epochs: 26	Test Acc: 73.76	Relu Count: 298836	Alpha: 0.000010	
+Epochs: 27	Test Acc: 74.14	Relu Count: 292979	Alpha: 0.000010	
+Epochs: 28	Test Acc: 74.28	Relu Count: 287158	Alpha: 0.000010	
+Epochs: 29	Test Acc: 74.41	Relu Count: 281645	Alpha: 0.000010	
+Epochs: 30	Test Acc: 73.82	Relu Count: 275932	Alpha: 0.000010	
+Epochs: 31	Test Acc: 73.82	Relu Count: 270459	Alpha: 0.000010	
+Epochs: 32	Test Acc: 73.96	Relu Count: 265015	Alpha: 0.000010	
+Epochs: 33	Test Acc: 74.83	Relu Count: 259544	Alpha: 0.000010	
+Epochs: 34	Test Acc: 74.51	Relu Count: 254254	Alpha: 0.000010	
+Epochs: 35	Test Acc: 74.25	Relu Count: 249030	Alpha: 0.000010	
+Epochs: 36	Test Acc: 73.69	Relu Count: 244414	Alpha: 0.000010	
+Epochs: 37	Test Acc: 74.48	Relu Count: 239297	Alpha: 0.000010	
+Epochs: 38	Test Acc: 74.93	Relu Count: 234804	Alpha: 0.000010	
+Epochs: 39	Test Acc: 74.32	Relu Count: 230398	Alpha: 0.000010	
+Epochs: 40	Test Acc: 75.04	Relu Count: 226410	Alpha: 0.000010	
+Epochs: 41	Test Acc: 74.0	Relu Count: 222305	Alpha: 0.000010	
+Epochs: 42	Test Acc: 74.5	Relu Count: 218502	Alpha: 0.000010	
+Epochs: 43	Test Acc: 74.88	Relu Count: 214351	Alpha: 0.000010	
+Epochs: 44	Test Acc: 74.21	Relu Count: 211398	Alpha: 0.000010	
+Epochs: 45	Test Acc: 73.89	Relu Count: 208480	Alpha: 0.000010	
+Epochs: 46	Test Acc: 74.67	Relu Count: 204736	Alpha: 0.000010	
+Epochs: 47	Test Acc: 74.11	Relu Count: 201328	Alpha: 0.000010	
+Epochs: 48	Test Acc: 74.15	Relu Count: 198572	Alpha: 0.000010	
+Epochs: 49	Test Acc: 74.97	Relu Count: 195474	Alpha: 0.000010	
+Epochs: 50	Test Acc: 75.02	Relu Count: 192929	Alpha: 0.000010	
+Epochs: 51	Test Acc: 74.4	Relu Count: 189915	Alpha: 0.000010	
+Epochs: 52	Test Acc: 74.38	Relu Count: 187058	Alpha: 0.000010	
+Epochs: 53	Test Acc: 74.35	Relu Count: 184746	Alpha: 0.000010	
+Epochs: 54	Test Acc: 74.59	Relu Count: 182798	Alpha: 0.000010	
+Epochs: 55	Test Acc: 74.85	Relu Count: 180598	Alpha: 0.000010	
+Epochs: 56	Test Acc: 74.56	Relu Count: 178015	Alpha: 0.000010	
+Epochs: 57	Test Acc: 74.75	Relu Count: 175536	Alpha: 0.000010	
+Epochs: 58	Test Acc: 74.54	Relu Count: 173968	Alpha: 0.000010	
+Epochs: 59	Test Acc: 74.46	Relu Count: 170825	Alpha: 0.000010	
+Epochs: 60	Test Acc: 74.77	Relu Count: 169096	Alpha: 0.000010	
+Epochs: 61	Test Acc: 74.25	Relu Count: 167713	Alpha: 0.000010	
+Epochs: 62	Test Acc: 74.86	Relu Count: 165135	Alpha: 0.000010	
+Epochs: 63	Test Acc: 74.02	Relu Count: 163305	Alpha: 0.000010	
+Epochs: 64	Test Acc: 74.68	Relu Count: 161850	Alpha: 0.000010	
+Epochs: 65	Test Acc: 74.41	Relu Count: 159748	Alpha: 0.000010	
+Epochs: 66	Test Acc: 74.61	Relu Count: 157880	Alpha: 0.000010	
+Epochs: 67	Test Acc: 74.02	Relu Count: 156796	Alpha: 0.000010	
+Epochs: 68	Test Acc: 74.53	Relu Count: 154731	Alpha: 0.000010	
+Epochs: 69	Test Acc: 74.24	Relu Count: 153448	Alpha: 0.000010	
+Epochs: 70	Test Acc: 74.5	Relu Count: 152192	Alpha: 0.000010	
+Epochs: 71	Test Acc: 74.34	Relu Count: 149679	Alpha: 0.000010	
+Epochs: 72	Test Acc: 74.75	Relu Count: 147997	Alpha: 0.000010	
+Epochs: 73	Test Acc: 74.93	Relu Count: 146928	Alpha: 0.000010	
+Epochs: 74	Test Acc: 74.86	Relu Count: 145374	Alpha: 0.000010	
+Epochs: 75	Test Acc: 75.01	Relu Count: 144066	Alpha: 0.000010	
+Epochs: 76	Test Acc: 74.88	Relu Count: 142702	Alpha: 0.000010	
+Epochs: 77	Test Acc: 74.78	Relu Count: 141469	Alpha: 0.000010	
+Epochs: 78	Test Acc: 74.66	Relu Count: 139986	Alpha: 0.000010	
+Epochs: 79	Test Acc: 74.66	Relu Count: 138727	Alpha: 0.000010	
+Epochs: 80	Test Acc: 75.07	Relu Count: 137296	Alpha: 0.000010	
+Epochs: 81	Test Acc: 74.0	Relu Count: 137081	Alpha: 0.000010	
+Epochs: 82	Test Acc: 74.68	Relu Count: 135136	Alpha: 0.000010	
+Epochs: 83	Test Acc: 74.99	Relu Count: 134752	Alpha: 0.000010	
+Epochs: 84	Test Acc: 74.64	Relu Count: 133537	Alpha: 0.000010	
+Epochs: 85	Test Acc: 75.0	Relu Count: 132416	Alpha: 0.000010	
+Epochs: 86	Test Acc: 74.51	Relu Count: 131534	Alpha: 0.000010	
+Epochs: 87	Test Acc: 74.89	Relu Count: 130264	Alpha: 0.000010	
+Epochs: 88	Test Acc: 74.26	Relu Count: 129470	Alpha: 0.000010	
+Epochs: 89	Test Acc: 74.73	Relu Count: 128607	Alpha: 0.000010	
+Epochs: 90	Test Acc: 74.85	Relu Count: 127873	Alpha: 0.000010	
+Epochs: 91	Test Acc: 74.86	Relu Count: 126795	Alpha: 0.000010	
+Epochs: 92	Test Acc: 74.88	Relu Count: 126015	Alpha: 0.000010	
+Epochs: 93	Test Acc: 74.53	Relu Count: 125056	Alpha: 0.000010	
+Epochs: 94	Test Acc: 74.78	Relu Count: 124233	Alpha: 0.000010	
+Epochs: 95	Test Acc: 74.59	Relu Count: 123418	Alpha: 0.000010	
+Epochs: 96	Test Acc: 74.35	Relu Count: 123002	Alpha: 0.000010	
+Epochs: 97	Test Acc: 74.23	Relu Count: 122561	Alpha: 0.000010	
+Epochs: 98	Test Acc: 74.1	Relu Count: 122020	Alpha: 0.000010	
+Epochs: 99	Test Acc: 74.2	Relu Count: 120642	Alpha: 0.000010	
+Epochs: 100	Test Acc: 74.31	Relu Count: 120185	Alpha: 0.000010	
+Epochs: 101	Test Acc: 74.6	Relu Count: 118912	Alpha: 0.000010	
+Epochs: 102	Test Acc: 74.61	Relu Count: 118797	Alpha: 0.000010	
+Epochs: 103	Test Acc: 75.02	Relu Count: 118026	Alpha: 0.000010	
+Epochs: 104	Test Acc: 74.47	Relu Count: 117206	Alpha: 0.000010	
+Epochs: 105	Test Acc: 74.82	Relu Count: 116426	Alpha: 0.000010	
+Epochs: 106	Test Acc: 74.2	Relu Count: 115904	Alpha: 0.000010	
+Epochs: 107	Test Acc: 74.64	Relu Count: 115642	Alpha: 0.000010	
+Epochs: 108	Test Acc: 74.44	Relu Count: 115220	Alpha: 0.000010	
+Epochs: 109	Test Acc: 74.75	Relu Count: 114100	Alpha: 0.000010	
+Epochs: 110	Test Acc: 73.68	Relu Count: 114304	Alpha: 0.000010	
+Epochs: 111	Test Acc: 74.24	Relu Count: 111904	Alpha: 0.000011	
+Epochs: 112	Test Acc: 74.14	Relu Count: 111893	Alpha: 0.000011	
+Epochs: 113	Test Acc: 74.61	Relu Count: 110411	Alpha: 0.000011	
+Epochs: 114	Test Acc: 74.6	Relu Count: 110513	Alpha: 0.000011	
+Epochs: 115	Test Acc: 73.91	Relu Count: 108194	Alpha: 0.000012	
+Epochs: 116	Test Acc: 74.53	Relu Count: 107897	Alpha: 0.000012	
+Epochs: 117	Test Acc: 74.5	Relu Count: 106757	Alpha: 0.000012	
+Epochs: 118	Test Acc: 74.68	Relu Count: 106116	Alpha: 0.000012	
+Epochs: 119	Test Acc: 74.25	Relu Count: 105732	Alpha: 0.000012	
+Epochs: 120	Test Acc: 74.69	Relu Count: 104892	Alpha: 0.000012	
+Epochs: 121	Test Acc: 74.51	Relu Count: 104248	Alpha: 0.000012	
+Epochs: 122	Test Acc: 74.35	Relu Count: 104372	Alpha: 0.000012	
+Epochs: 123	Test Acc: 74.11	Relu Count: 102673	Alpha: 0.000013	
+Epochs: 124	Test Acc: 73.77	Relu Count: 102446	Alpha: 0.000013	
+Epochs: 125	Test Acc: 74.0	Relu Count: 101887	Alpha: 0.000013	
+Epochs: 126	Test Acc: 74.25	Relu Count: 101093	Alpha: 0.000013	
+Epochs: 127	Test Acc: 74.63	Relu Count: 100613	Alpha: 0.000013	
+Epochs: 128	Test Acc: 74.34	Relu Count: 99805	Alpha: 0.000013	
+Epochs: 129	Test Acc: 74.43	Relu Count: 99222	Alpha: 0.000013	
+Epochs: 130	Test Acc: 73.76	Relu Count: 98631	Alpha: 0.000013	
+Epochs: 131	Test Acc: 73.77	Relu Count: 98297	Alpha: 0.000013	
+Epochs: 132	Test Acc: 74.05	Relu Count: 98645	Alpha: 0.000013	
+Epochs: 133	Test Acc: 74.14	Relu Count: 95877	Alpha: 0.000015	
+Epochs: 134	Test Acc: 74.14	Relu Count: 96099	Alpha: 0.000015	
+Epochs: 135	Test Acc: 74.31	Relu Count: 94134	Alpha: 0.000016	
+Epochs: 136	Test Acc: 73.74	Relu Count: 94039	Alpha: 0.000016	
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Epochs: 0	Test Acc: 65.04	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 1	Test Acc: 67.45	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 2	Test Acc: 69.62	Relu Count: 482374	Alpha: 0.000010	
+Epochs: 3	Test Acc: 69.8	Relu Count: 475317	Alpha: 0.000010	
+Epochs: 4	Test Acc: 70.96	Relu Count: 469507	Alpha: 0.000010	
+Epochs: 5	Test Acc: 71.46	Relu Count: 464059	Alpha: 0.000010	
+Epochs: 6	Test Acc: 72.11	Relu Count: 458667	Alpha: 0.000010	
+Epochs: 7	Test Acc: 72.74	Relu Count: 453031	Alpha: 0.000010	
+Epochs: 8	Test Acc: 72.4	Relu Count: 446518	Alpha: 0.000010	
+Epochs: 9	Test Acc: 73.21	Relu Count: 439267	Alpha: 0.000010	
+Epochs: 10	Test Acc: 72.74	Relu Count: 431385	Alpha: 0.000010	
+Epochs: 11	Test Acc: 72.93	Relu Count: 423042	Alpha: 0.000010	
+Epochs: 12	Test Acc: 73.17	Relu Count: 413746	Alpha: 0.000010	
+Epochs: 13	Test Acc: 72.49	Relu Count: 403784	Alpha: 0.000010	
+Epochs: 14	Test Acc: 72.88	Relu Count: 393945	Alpha: 0.000010	
+Epochs: 15	Test Acc: 73.15	Relu Count: 384119	Alpha: 0.000010	
+Epochs: 16	Test Acc: 73.98	Relu Count: 374783	Alpha: 0.000010	
+Epochs: 17	Test Acc: 73.83	Relu Count: 365819	Alpha: 0.000010	
+Epochs: 18	Test Acc: 73.78	Relu Count: 357618	Alpha: 0.000010	
+Epochs: 19	Test Acc: 73.39	Relu Count: 349424	Alpha: 0.000010	
+Epochs: 20	Test Acc: 73.06	Relu Count: 341560	Alpha: 0.000010	
+Epochs: 21	Test Acc: 74.27	Relu Count: 334147	Alpha: 0.000010	
+Epochs: 22	Test Acc: 73.48	Relu Count: 326763	Alpha: 0.000010	
+Epochs: 23	Test Acc: 73.7	Relu Count: 319746	Alpha: 0.000010	
+Epochs: 24	Test Acc: 73.91	Relu Count: 312775	Alpha: 0.000010	
+Epochs: 25	Test Acc: 73.93	Relu Count: 306190	Alpha: 0.000010	
+Epochs: 26	Test Acc: 73.84	Relu Count: 299649	Alpha: 0.000010	
+Epochs: 27	Test Acc: 73.43	Relu Count: 293467	Alpha: 0.000010	
+Epochs: 28	Test Acc: 73.78	Relu Count: 287046	Alpha: 0.000010	
+Epochs: 29	Test Acc: 73.63	Relu Count: 280932	Alpha: 0.000010	
+Epochs: 30	Test Acc: 73.7	Relu Count: 275261	Alpha: 0.000010	
+Epochs: 31	Test Acc: 74.34	Relu Count: 269544	Alpha: 0.000010	
+Epochs: 32	Test Acc: 73.81	Relu Count: 264285	Alpha: 0.000010	
+Epochs: 33	Test Acc: 73.97	Relu Count: 259103	Alpha: 0.000010	
+Epochs: 34	Test Acc: 74.74	Relu Count: 253546	Alpha: 0.000010	
+Epochs: 35	Test Acc: 74.42	Relu Count: 248548	Alpha: 0.000010	
+Epochs: 36	Test Acc: 74.59	Relu Count: 243390	Alpha: 0.000010	
+Epochs: 37	Test Acc: 74.35	Relu Count: 238917	Alpha: 0.000010	
+Epochs: 38	Test Acc: 73.81	Relu Count: 234399	Alpha: 0.000010	
+Epochs: 39	Test Acc: 74.33	Relu Count: 230231	Alpha: 0.000010	
+Epochs: 40	Test Acc: 74.52	Relu Count: 225735	Alpha: 0.000010	
+Epochs: 41	Test Acc: 74.3	Relu Count: 221979	Alpha: 0.000010	
+Epochs: 42	Test Acc: 74.49	Relu Count: 218384	Alpha: 0.000010	
+Epochs: 43	Test Acc: 74.4	Relu Count: 214423	Alpha: 0.000010	
+Epochs: 44	Test Acc: 74.52	Relu Count: 210699	Alpha: 0.000010	
+Epochs: 45	Test Acc: 74.59	Relu Count: 207471	Alpha: 0.000010	
+Epochs: 46	Test Acc: 74.52	Relu Count: 204046	Alpha: 0.000010	
+Epochs: 47	Test Acc: 74.21	Relu Count: 200937	Alpha: 0.000010	
+Epochs: 48	Test Acc: 74.39	Relu Count: 198629	Alpha: 0.000010	
+Epochs: 49	Test Acc: 74.05	Relu Count: 195179	Alpha: 0.000010	
+Epochs: 50	Test Acc: 75.06	Relu Count: 192436	Alpha: 0.000010	
+Epochs: 51	Test Acc: 74.32	Relu Count: 189782	Alpha: 0.000010	
+Epochs: 52	Test Acc: 74.13	Relu Count: 187471	Alpha: 0.000010	
+Epochs: 53	Test Acc: 74.63	Relu Count: 184661	Alpha: 0.000010	
+Epochs: 54	Test Acc: 74.35	Relu Count: 182647	Alpha: 0.000010	
+Epochs: 55	Test Acc: 74.42	Relu Count: 179698	Alpha: 0.000010	
+Epochs: 56	Test Acc: 74.47	Relu Count: 177588	Alpha: 0.000010	
+Epochs: 57	Test Acc: 74.27	Relu Count: 175235	Alpha: 0.000010	
+Epochs: 58	Test Acc: 75.0	Relu Count: 173295	Alpha: 0.000010	
+Epochs: 59	Test Acc: 74.74	Relu Count: 171566	Alpha: 0.000010	
+Epochs: 60	Test Acc: 74.32	Relu Count: 169258	Alpha: 0.000010	
+Epochs: 61	Test Acc: 74.58	Relu Count: 167218	Alpha: 0.000010	
+Epochs: 62	Test Acc: 74.32	Relu Count: 165605	Alpha: 0.000010	
+Epochs: 63	Test Acc: 74.59	Relu Count: 163597	Alpha: 0.000010	
+Epochs: 64	Test Acc: 74.2	Relu Count: 161962	Alpha: 0.000010	
+Epochs: 65	Test Acc: 74.59	Relu Count: 160339	Alpha: 0.000010	
+Epochs: 66	Test Acc: 74.24	Relu Count: 158747	Alpha: 0.000010	
+Epochs: 67	Test Acc: 74.79	Relu Count: 156382	Alpha: 0.000010	
+Epochs: 68	Test Acc: 74.83	Relu Count: 154768	Alpha: 0.000010	
+Epochs: 69	Test Acc: 74.4	Relu Count: 153347	Alpha: 0.000010	
+Epochs: 70	Test Acc: 73.88	Relu Count: 151609	Alpha: 0.000010	
+Epochs: 71	Test Acc: 74.66	Relu Count: 149992	Alpha: 0.000010	
+Epochs: 72	Test Acc: 74.54	Relu Count: 148917	Alpha: 0.000010	
+Epochs: 73	Test Acc: 74.64	Relu Count: 147170	Alpha: 0.000010	
+Epochs: 74	Test Acc: 74.16	Relu Count: 145768	Alpha: 0.000010	
+Epochs: 75	Test Acc: 74.25	Relu Count: 145228	Alpha: 0.000010	
+Epochs: 76	Test Acc: 74.68	Relu Count: 142996	Alpha: 0.000010	
+Epochs: 77	Test Acc: 74.6	Relu Count: 141737	Alpha: 0.000010	
+Epochs: 78	Test Acc: 74.33	Relu Count: 140865	Alpha: 0.000010	
+Epochs: 79	Test Acc: 74.58	Relu Count: 139179	Alpha: 0.000010	
+Epochs: 80	Test Acc: 74.4	Relu Count: 138682	Alpha: 0.000010	
+Epochs: 81	Test Acc: 74.84	Relu Count: 137214	Alpha: 0.000010	
+Epochs: 82	Test Acc: 74.26	Relu Count: 135906	Alpha: 0.000010	
+Epochs: 83	Test Acc: 74.59	Relu Count: 135024	Alpha: 0.000010	
+Epochs: 84	Test Acc: 74.57	Relu Count: 133676	Alpha: 0.000010	
+Epochs: 85	Test Acc: 74.61	Relu Count: 132954	Alpha: 0.000010	
+Epochs: 86	Test Acc: 74.5	Relu Count: 133006	Alpha: 0.000010	
+Epochs: 87	Test Acc: 74.53	Relu Count: 130088	Alpha: 0.000011	
+Epochs: 88	Test Acc: 74.23	Relu Count: 128797	Alpha: 0.000011	
+Epochs: 89	Test Acc: 74.87	Relu Count: 128356	Alpha: 0.000011	
+Epochs: 90	Test Acc: 74.66	Relu Count: 126786	Alpha: 0.000011	
+Epochs: 91	Test Acc: 74.37	Relu Count: 125383	Alpha: 0.000011	
+Epochs: 92	Test Acc: 74.39	Relu Count: 124517	Alpha: 0.000011	
+Epochs: 93	Test Acc: 74.36	Relu Count: 124207	Alpha: 0.000011	
+Epochs: 94	Test Acc: 74.32	Relu Count: 123391	Alpha: 0.000011	
+Epochs: 95	Test Acc: 74.79	Relu Count: 122264	Alpha: 0.000011	
+Epochs: 96	Test Acc: 74.28	Relu Count: 121636	Alpha: 0.000011	
+Epochs: 97	Test Acc: 74.64	Relu Count: 121032	Alpha: 0.000011	
+Epochs: 98	Test Acc: 74.9	Relu Count: 120167	Alpha: 0.000011	
+Epochs: 99	Test Acc: 74.14	Relu Count: 118816	Alpha: 0.000011	
+Epochs: 100	Test Acc: 74.81	Relu Count: 118222	Alpha: 0.000011	
+Epochs: 101	Test Acc: 74.46	Relu Count: 117272	Alpha: 0.000011	
+Epochs: 102	Test Acc: 74.43	Relu Count: 116350	Alpha: 0.000011	
+Epochs: 103	Test Acc: 74.88	Relu Count: 115684	Alpha: 0.000011	
+Epochs: 104	Test Acc: 74.26	Relu Count: 115517	Alpha: 0.000011	
+Epochs: 105	Test Acc: 74.76	Relu Count: 114619	Alpha: 0.000011	
+Epochs: 106	Test Acc: 74.49	Relu Count: 113904	Alpha: 0.000011	
+Epochs: 107	Test Acc: 74.42	Relu Count: 113694	Alpha: 0.000011	
+Epochs: 108	Test Acc: 74.48	Relu Count: 112327	Alpha: 0.000011	
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Hyperparameter List
+Dataset: cifar100
+Architecture: resnet18_in
+ReLU Budget: 9000
+Finetune Epochs: 100
+Learning Rate: 0.001
+Alpha: 1e-05
+Block Type: LearnableAlpha
+Num of Neighbours: 0
+Loaded the base_classifier
+Original Model Test Accuracy: 76.04
+Original ReLU Count: 491520
+Epochs: 0	Test Acc: 65.04	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 1	Test Acc: 66.5	Relu Count: 491520	Alpha: 0.000010	
+Epochs: 2	Test Acc: 69.32	Relu Count: 481667	Alpha: 0.000010	
+Epochs: 3	Test Acc: 70.74	Relu Count: 475361	Alpha: 0.000010	
+Epochs: 4	Test Acc: 71.42	Relu Count: 469593	Alpha: 0.000010	
+Epochs: 5	Test Acc: 71.74	Relu Count: 464213	Alpha: 0.000010	
+Epochs: 6	Test Acc: 72.26	Relu Count: 458735	Alpha: 0.000010	
+Epochs: 7	Test Acc: 73.04	Relu Count: 452381	Alpha: 0.000010	
+Epochs: 8	Test Acc: 72.48	Relu Count: 445381	Alpha: 0.000010	
+Epochs: 9	Test Acc: 72.13	Relu Count: 437991	Alpha: 0.000010	
+Epochs: 10	Test Acc: 72.27	Relu Count: 430391	Alpha: 0.000010	
+Epochs: 11	Test Acc: 72.95	Relu Count: 422034	Alpha: 0.000010	
+Epochs: 12	Test Acc: 73.0	Relu Count: 413234	Alpha: 0.000010	
+Epochs: 13	Test Acc: 72.83	Relu Count: 403578	Alpha: 0.000010	
+Epochs: 14	Test Acc: 72.38	Relu Count: 393517	Alpha: 0.000010	
+Epochs: 15	Test Acc: 72.98	Relu Count: 383108	Alpha: 0.000010	
+Epochs: 16	Test Acc: 72.59	Relu Count: 373264	Alpha: 0.000010	
+Epochs: 17	Test Acc: 73.63	Relu Count: 364265	Alpha: 0.000010	
+Epochs: 18	Test Acc: 73.11	Relu Count: 355990	Alpha: 0.000010	
+Epochs: 19	Test Acc: 73.0	Relu Count: 348527	Alpha: 0.000010	
+Epochs: 20	Test Acc: 73.65	Relu Count: 341155	Alpha: 0.000010	
+Epochs: 21	Test Acc: 73.36	Relu Count: 333870	Alpha: 0.000010	
+Epochs: 22	Test Acc: 73.95	Relu Count: 326726	Alpha: 0.000010	
+Epochs: 23	Test Acc: 73.52	Relu Count: 319644	Alpha: 0.000010	
+Epochs: 24	Test Acc: 74.09	Relu Count: 312809	Alpha: 0.000010	
+Epochs: 25	Test Acc: 74.08	Relu Count: 306001	Alpha: 0.000010	
+Epochs: 26	Test Acc: 73.6	Relu Count: 299434	Alpha: 0.000010	
+Epochs: 27	Test Acc: 73.71	Relu Count: 293151	Alpha: 0.000010	
+Epochs: 28	Test Acc: 73.87	Relu Count: 286778	Alpha: 0.000010	
+Epochs: 29	Test Acc: 74.03	Relu Count: 280909	Alpha: 0.000010	
+Epochs: 30	Test Acc: 74.41	Relu Count: 274702	Alpha: 0.000010	
+Epochs: 31	Test Acc: 74.05	Relu Count: 269367	Alpha: 0.000010	
+Epochs: 32	Test Acc: 74.27	Relu Count: 264170	Alpha: 0.000010	
+Epochs: 33	Test Acc: 73.9	Relu Count: 258628	Alpha: 0.000010	
+Epochs: 34	Test Acc: 74.69	Relu Count: 253689	Alpha: 0.000010	
+Epochs: 35	Test Acc: 73.92	Relu Count: 248613	Alpha: 0.000010	
+Epochs: 36	Test Acc: 73.86	Relu Count: 243875	Alpha: 0.000010	
+Epochs: 37	Test Acc: 74.37	Relu Count: 238871	Alpha: 0.000010	
+Epochs: 38	Test Acc: 74.29	Relu Count: 234650	Alpha: 0.000010	
+Epochs: 39	Test Acc: 74.07	Relu Count: 231436	Alpha: 0.000010	
+Epochs: 40	Test Acc: 74.54	Relu Count: 226538	Alpha: 0.000010	
+Epochs: 41	Test Acc: 74.43	Relu Count: 222667	Alpha: 0.000010	
+Epochs: 42	Test Acc: 74.26	Relu Count: 218738	Alpha: 0.000010	
+Epochs: 43	Test Acc: 74.27	Relu Count: 214533	Alpha: 0.000010	
+Epochs: 44	Test Acc: 74.23	Relu Count: 211658	Alpha: 0.000010	
+Epochs: 45	Test Acc: 74.19	Relu Count: 208116	Alpha: 0.000010	
+Epochs: 46	Test Acc: 74.63	Relu Count: 204658	Alpha: 0.000010	
+Epochs: 47	Test Acc: 74.42	Relu Count: 201451	Alpha: 0.000010	
+Epochs: 48	Test Acc: 74.86	Relu Count: 198139	Alpha: 0.000010	
+Epochs: 49	Test Acc: 74.54	Relu Count: 195618	Alpha: 0.000010	
+Epochs: 50	Test Acc: 74.26	Relu Count: 192888	Alpha: 0.000010	
+Epochs: 51	Test Acc: 74.7	Relu Count: 189835	Alpha: 0.000010	
+Epochs: 52	Test Acc: 74.11	Relu Count: 187372	Alpha: 0.000010	
+Epochs: 53	Test Acc: 74.65	Relu Count: 184740	Alpha: 0.000010	
+Epochs: 54	Test Acc: 74.54	Relu Count: 182593	Alpha: 0.000010	
+Epochs: 55	Test Acc: 74.52	Relu Count: 180219	Alpha: 0.000010	
+Epochs: 56	Test Acc: 74.93	Relu Count: 178277	Alpha: 0.000010	
+Epochs: 57	Test Acc: 73.86	Relu Count: 176347	Alpha: 0.000010	
+Epochs: 58	Test Acc: 74.14	Relu Count: 173441	Alpha: 0.000010	
+Epochs: 59	Test Acc: 74.39	Relu Count: 171222	Alpha: 0.000010	
+Epochs: 60	Test Acc: 74.74	Relu Count: 169229	Alpha: 0.000010	
+Epochs: 61	Test Acc: 74.69	Relu Count: 167628	Alpha: 0.000010	
+Epochs: 62	Test Acc: 74.56	Relu Count: 165463	Alpha: 0.000010	
+Epochs: 63	Test Acc: 74.67	Relu Count: 163313	Alpha: 0.000010	
+Epochs: 64	Test Acc: 74.48	Relu Count: 161558	Alpha: 0.000010	
+Epochs: 65	Test Acc: 74.03	Relu Count: 160427	Alpha: 0.000010	
+Epochs: 66	Test Acc: 74.21	Relu Count: 158024	Alpha: 0.000010	
+Epochs: 67	Test Acc: 74.75	Relu Count: 156373	Alpha: 0.000010	
+Epochs: 68	Test Acc: 74.38	Relu Count: 154262	Alpha: 0.000010	
+Epochs: 69	Test Acc: 74.39	Relu Count: 152878	Alpha: 0.000010	
+Epochs: 70	Test Acc: 74.46	Relu Count: 151268	Alpha: 0.000010	
+Epochs: 71	Test Acc: 74.37	Relu Count: 149808	Alpha: 0.000010	
+Epochs: 72	Test Acc: 73.99	Relu Count: 148327	Alpha: 0.000010	
+Epochs: 73	Test Acc: 73.98	Relu Count: 147260	Alpha: 0.000010	
+Epochs: 74	Test Acc: 74.46	Relu Count: 145788	Alpha: 0.000010	
+Epochs: 75	Test Acc: 74.28	Relu Count: 143768	Alpha: 0.000010	
+Epochs: 76	Test Acc: 74.14	Relu Count: 142888	Alpha: 0.000010	
+Epochs: 77	Test Acc: 74.74	Relu Count: 141526	Alpha: 0.000010	
+Epochs: 78	Test Acc: 74.57	Relu Count: 140553	Alpha: 0.000010	
+Epochs: 79	Test Acc: 74.25	Relu Count: 139504	Alpha: 0.000010	
+Epochs: 80	Test Acc: 74.19	Relu Count: 138388	Alpha: 0.000010	
+Epochs: 81	Test Acc: 74.34	Relu Count: 137200	Alpha: 0.000010	
+Epochs: 82	Test Acc: 74.75	Relu Count: 136371	Alpha: 0.000010	
+Epochs: 83	Test Acc: 74.89	Relu Count: 135294	Alpha: 0.000010	
+Epochs: 84	Test Acc: 74.3	Relu Count: 134088	Alpha: 0.000010	
+Epochs: 85	Test Acc: 74.69	Relu Count: 133606	Alpha: 0.000010	
+Epochs: 86	Test Acc: 74.51	Relu Count: 132262	Alpha: 0.000010	
+Epochs: 87	Test Acc: 74.34	Relu Count: 130695	Alpha: 0.000010	
+Epochs: 88	Test Acc: 73.88	Relu Count: 129949	Alpha: 0.000010	
+Epochs: 89	Test Acc: 74.22	Relu Count: 129577	Alpha: 0.000010	
+Epochs: 90	Test Acc: 74.62	Relu Count: 128603	Alpha: 0.000010	
+Epochs: 91	Test Acc: 74.97	Relu Count: 128234	Alpha: 0.000010	
+Epochs: 92	Test Acc: 74.29	Relu Count: 127278	Alpha: 0.000010	
+Epochs: 93	Test Acc: 74.7	Relu Count: 125693	Alpha: 0.000010	
+Epochs: 94	Test Acc: 74.37	Relu Count: 125288	Alpha: 0.000010	
+Epochs: 95	Test Acc: 74.27	Relu Count: 124179	Alpha: 0.000010	
+Epochs: 96	Test Acc: 74.57	Relu Count: 123814	Alpha: 0.000010	
+Epochs: 97	Test Acc: 74.4	Relu Count: 122599	Alpha: 0.000010	
+Epochs: 98	Test Acc: 74.41	Relu Count: 122092	Alpha: 0.000010	
+Epochs: 99	Test Acc: 74.55	Relu Count: 120974	Alpha: 0.000010	
+Epochs: 100	Test Acc: 74.76	Relu Count: 120234	Alpha: 0.000010	
+Epochs: 101	Test Acc: 74.84	Relu Count: 119563	Alpha: 0.000010	
+Epochs: 102	Test Acc: 73.94	Relu Count: 119435	Alpha: 0.000010	
+Epochs: 103	Test Acc: 74.31	Relu Count: 118005	Alpha: 0.000010	
+Epochs: 104	Test Acc: 74.65	Relu Count: 117302	Alpha: 0.000010	
+Epochs: 105	Test Acc: 74.52	Relu Count: 116934	Alpha: 0.000010	
+Epochs: 106	Test Acc: 74.69	Relu Count: 116316	Alpha: 0.000010	
+Epochs: 107	Test Acc: 74.52	Relu Count: 115393	Alpha: 0.000010	
+Epochs: 108	Test Acc: 74.4	Relu Count: 115027	Alpha: 0.000010	
+Epochs: 109	Test Acc: 74.49	Relu Count: 113984	Alpha: 0.000010	
+Epochs: 110	Test Acc: 74.66	Relu Count: 113112	Alpha: 0.000010	
+Epochs: 111	Test Acc: 74.22	Relu Count: 113104	Alpha: 0.000010	
+Epochs: 112	Test Acc: 74.19	Relu Count: 112398	Alpha: 0.000010	
+Epochs: 113	Test Acc: 74.38	Relu Count: 111763	Alpha: 0.000010	
+Epochs: 114	Test Acc: 74.58	Relu Count: 112178	Alpha: 0.000010	
+Epochs: 115	Test Acc: 74.22	Relu Count: 109065	Alpha: 0.000011	
+Epochs: 116	Test Acc: 74.62	Relu Count: 108347	Alpha: 0.000011	
+Epochs: 117	Test Acc: 74.17	Relu Count: 108317	Alpha: 0.000011	
+Epochs: 118	Test Acc: 73.73	Relu Count: 107992	Alpha: 0.000011	
+Epochs: 119	Test Acc: 74.78	Relu Count: 106488	Alpha: 0.000011	
+Epochs: 120	Test Acc: 74.64	Relu Count: 106121	Alpha: 0.000011	
+Epochs: 121	Test Acc: 74.28	Relu Count: 105146	Alpha: 0.000011	
+Epochs: 122	Test Acc: 74.35	Relu Count: 104820	Alpha: 0.000011	
+Epochs: 123	Test Acc: 74.54	Relu Count: 104566	Alpha: 0.000011	
+Epochs: 124	Test Acc: 74.87	Relu Count: 104590	Alpha: 0.000011	
+Epochs: 125	Test Acc: 74.52	Relu Count: 102539	Alpha: 0.000012	
+Epochs: 126	Test Acc: 74.56	Relu Count: 101659	Alpha: 0.000012	
+Epochs: 127	Test Acc: 74.48	Relu Count: 101256	Alpha: 0.000012	
+Epochs: 128	Test Acc: 74.33	Relu Count: 100995	Alpha: 0.000012	
+Epochs: 129	Test Acc: 74.79	Relu Count: 100093	Alpha: 0.000012	
+Epochs: 130	Test Acc: 74.3	Relu Count: 100114	Alpha: 0.000012	
+Epochs: 131	Test Acc: 74.26	Relu Count: 98182	Alpha: 0.000013	
+Epochs: 132	Test Acc: 74.45	Relu Count: 97793	Alpha: 0.000013	
+Epochs: 133	Test Acc: 74.07	Relu Count: 97187	Alpha: 0.000013	
+Epochs: 134	Test Acc: 74.24	Relu Count: 96660	Alpha: 0.000013	
+Epochs: 135	Test Acc: 74.21	Relu Count: 96594	Alpha: 0.000013	
+Epochs: 136	Test Acc: 73.56	Relu Count: 95838	Alpha: 0.000013	
+Epochs: 137	Test Acc: 73.43	Relu Count: 95590	Alpha: 0.000013	
+Epochs: 138	Test Acc: 74.45	Relu Count: 95039	Alpha: 0.000013	
+Epochs: 139	Test Acc: 74.42	Relu Count: 95261	Alpha: 0.000013	
+Epochs: 140	Test Acc: 74.33	Relu Count: 93551	Alpha: 0.000015	
+Epochs: 141	Test Acc: 74.42	Relu Count: 92073	Alpha: 0.000015	
+Epochs: 142	Test Acc: 74.94	Relu Count: 92170	Alpha: 0.000015	
+Epochs: 143	Test Acc: 73.98	Relu Count: 91280	Alpha: 0.000016	
+Epochs: 144	Test Acc: 74.23	Relu Count: 90598	Alpha: 0.000016	
+Epochs: 145	Test Acc: 74.08	Relu Count: 90452	Alpha: 0.000016	
+Epochs: 146	Test Acc: 74.37	Relu Count: 89669	Alpha: 0.000016	
+Epochs: 147	Test Acc: 74.04	Relu Count: 89274	Alpha: 0.000016	
+Epochs: 148	Test Acc: 73.95	Relu Count: 88857	Alpha: 0.000016	
+Epochs: 149	Test Acc: 74.27	Relu Count: 88914	Alpha: 0.000016	
+Epochs: 150	Test Acc: 74.1	Relu Count: 87470	Alpha: 0.000018	
+Epochs: 151	Test Acc: 74.15	Relu Count: 86751	Alpha: 0.000018	
+Epochs: 152	Test Acc: 74.3	Relu Count: 85752	Alpha: 0.000018	
+Epochs: 153	Test Acc: 73.88	Relu Count: 85567	Alpha: 0.000018	
+Epochs: 154	Test Acc: 74.19	Relu Count: 85451	Alpha: 0.000018	
+Epochs: 155	Test Acc: 73.94	Relu Count: 85033	Alpha: 0.000018	
+Epochs: 156	Test Acc: 74.01	Relu Count: 84444	Alpha: 0.000018	
+Epochs: 157	Test Acc: 73.81	Relu Count: 84435	Alpha: 0.000018	
+Epochs: 158	Test Acc: 74.3	Relu Count: 84000	Alpha: 0.000018	
+Epochs: 159	Test Acc: 73.86	Relu Count: 83474	Alpha: 0.000018	
+Epochs: 160	Test Acc: 73.61	Relu Count: 83565	Alpha: 0.000018	
+Epochs: 161	Test Acc: 72.95	Relu Count: 82229	Alpha: 0.000019	
+Epochs: 162	Test Acc: 74.07	Relu Count: 81584	Alpha: 0.000019	
+Epochs: 163	Test Acc: 74.28	Relu Count: 81341	Alpha: 0.000019	
+Epochs: 164	Test Acc: 74.23	Relu Count: 80454	Alpha: 0.000019	
+Epochs: 165	Test Acc: 74.0	Relu Count: 80575	Alpha: 0.000019	
+Epochs: 166	Test Acc: 74.22	Relu Count: 79667	Alpha: 0.000021	
+Epochs: 167	Test Acc: 74.06	Relu Count: 79168	Alpha: 0.000021	
+Epochs: 168	Test Acc: 73.65	Relu Count: 78755	Alpha: 0.000021	
+Epochs: 169	Test Acc: 74.05	Relu Count: 78042	Alpha: 0.000021	
+Epochs: 170	Test Acc: 73.72	Relu Count: 78388	Alpha: 0.000021	
+Epochs: 171	Test Acc: 73.11	Relu Count: 76686	Alpha: 0.000024	
+Epochs: 172	Test Acc: 72.57	Relu Count: 76625	Alpha: 0.000024	
+Epochs: 173	Test Acc: 73.7	Relu Count: 76531	Alpha: 0.000024	
+Epochs: 174	Test Acc: 73.51	Relu Count: 75869	Alpha: 0.000024	
+Epochs: 175	Test Acc: 74.11	Relu Count: 75430	Alpha: 0.000024	
+Epochs: 176	Test Acc: 73.73	Relu Count: 75687	Alpha: 0.000024	
+Epochs: 177	Test Acc: 73.66	Relu Count: 74112	Alpha: 0.000026	
+Epochs: 178	Test Acc: 73.78	Relu Count: 73809	Alpha: 0.000026	
+Epochs: 179	Test Acc: 73.31	Relu Count: 73164	Alpha: 0.000026	
+Epochs: 180	Test Acc: 73.77	Relu Count: 73105	Alpha: 0.000026	
+Epochs: 181	Test Acc: 73.13	Relu Count: 72988	Alpha: 0.000026	
+Epochs: 182	Test Acc: 73.4	Relu Count: 72446	Alpha: 0.000026	
+Epochs: 183	Test Acc: 73.26	Relu Count: 72536	Alpha: 0.000026	
+Epochs: 184	Test Acc: 72.98	Relu Count: 71528	Alpha: 0.000029	
+Epochs: 185	Test Acc: 73.04	Relu Count: 71071	Alpha: 0.000029	
+Epochs: 186	Test Acc: 73.44	Relu Count: 70713	Alpha: 0.000029	
+Epochs: 187	Test Acc: 73.27	Relu Count: 69989	Alpha: 0.000029	
+Epochs: 188	Test Acc: 73.44	Relu Count: 69924	Alpha: 0.000029	
+Epochs: 189	Test Acc: 73.56	Relu Count: 70084	Alpha: 0.000029	
+Epochs: 190	Test Acc: 72.98	Relu Count: 68865	Alpha: 0.000031	
+Epochs: 191	Test Acc: 73.84	Relu Count: 68558	Alpha: 0.000031	
+Epochs: 192	Test Acc: 73.37	Relu Count: 67996	Alpha: 0.000031	
+Epochs: 193	Test Acc: 72.85	Relu Count: 67806	Alpha: 0.000031	
+Epochs: 194	Test Acc: 73.46	Relu Count: 67580	Alpha: 0.000031	
+Epochs: 195	Test Acc: 73.44	Relu Count: 67250	Alpha: 0.000031	
+Epochs: 196	Test Acc: 73.12	Relu Count: 67228	Alpha: 0.000031	
+Epochs: 197	Test Acc: 73.56	Relu Count: 66897	Alpha: 0.000031	
+Epochs: 198	Test Acc: 73.23	Relu Count: 66460	Alpha: 0.000031	
+Epochs: 199	Test Acc: 73.73	Relu Count: 66843	Alpha: 0.000031	
+Epochs: 200	Test Acc: 72.5	Relu Count: 65280	Alpha: 0.000035	
+Epochs: 201	Test Acc: 73.79	Relu Count: 65459	Alpha: 0.000035	
+Epochs: 202	Test Acc: 73.34	Relu Count: 64580	Alpha: 0.000038	
+Epochs: 203	Test Acc: 73.1	Relu Count: 64350	Alpha: 0.000038	
+Epochs: 204	Test Acc: 73.14	Relu Count: 64218	Alpha: 0.000038	
+Epochs: 205	Test Acc: 73.29	Relu Count: 63620	Alpha: 0.000038	
+Epochs: 206	Test Acc: 73.17	Relu Count: 63435	Alpha: 0.000038	
+Epochs: 207	Test Acc: 72.75	Relu Count: 63367	Alpha: 0.000038	
+Epochs: 208	Test Acc: 73.16	Relu Count: 63768	Alpha: 0.000038	
+Epochs: 209	Test Acc: 72.87	Relu Count: 62216	Alpha: 0.000042	
+Epochs: 210	Test Acc: 72.88	Relu Count: 62199	Alpha: 0.000042	
+Epochs: 211	Test Acc: 72.81	Relu Count: 62050	Alpha: 0.000042	
+Epochs: 212	Test Acc: 72.9	Relu Count: 61549	Alpha: 0.000042	
+Epochs: 213	Test Acc: 72.65	Relu Count: 61608	Alpha: 0.000042	
+Epochs: 214	Test Acc: 73.03	Relu Count: 60609	Alpha: 0.000046	
+Epochs: 215	Test Acc: 72.76	Relu Count: 60026	Alpha: 0.000046	
+Epochs: 216	Test Acc: 72.31	Relu Count: 60189	Alpha: 0.000046	
+Epochs: 217	Test Acc: 72.88	Relu Count: 59295	Alpha: 0.000051	
+Epochs: 218	Test Acc: 72.58	Relu Count: 58968	Alpha: 0.000051	
+Epochs: 219	Test Acc: 72.4	Relu Count: 58983	Alpha: 0.000051	
+Epochs: 220	Test Acc: 71.89	Relu Count: 58388	Alpha: 0.000056	
+Epochs: 221	Test Acc: 72.26	Relu Count: 57807	Alpha: 0.000056	
+Epochs: 222	Test Acc: 72.5	Relu Count: 57296	Alpha: 0.000056	
+Epochs: 223	Test Acc: 71.91	Relu Count: 57083	Alpha: 0.000056	
+Epochs: 224	Test Acc: 72.58	Relu Count: 57178	Alpha: 0.000056	
+Epochs: 225	Test Acc: 72.03	Relu Count: 56160	Alpha: 0.000061	
+Epochs: 226	Test Acc: 72.72	Relu Count: 56089	Alpha: 0.000061	
+Epochs: 227	Test Acc: 72.35	Relu Count: 55643	Alpha: 0.000061	
+Epochs: 228	Test Acc: 71.68	Relu Count: 55800	Alpha: 0.000061	
+Epochs: 229	Test Acc: 71.99	Relu Count: 54903	Alpha: 0.000067	
+Epochs: 230	Test Acc: 72.17	Relu Count: 54391	Alpha: 0.000067	
+Epochs: 231	Test Acc: 71.65	Relu Count: 54477	Alpha: 0.000067	
+Epochs: 232	Test Acc: 71.79	Relu Count: 53527	Alpha: 0.000074	
+Epochs: 233	Test Acc: 71.19	Relu Count: 53255	Alpha: 0.000074	
+Epochs: 234	Test Acc: 71.57	Relu Count: 53115	Alpha: 0.000074	
+Epochs: 235	Test Acc: 72.06	Relu Count: 52740	Alpha: 0.000074	
+Epochs: 236	Test Acc: 70.16	Relu Count: 52650	Alpha: 0.000074	
+Epochs: 237	Test Acc: 71.91	Relu Count: 52422	Alpha: 0.000074	
+Epochs: 238	Test Acc: 71.32	Relu Count: 52479	Alpha: 0.000074	
+Epochs: 239	Test Acc: 71.76	Relu Count: 51879	Alpha: 0.000081	
+Epochs: 240	Test Acc: 71.85	Relu Count: 51423	Alpha: 0.000081	
+Epochs: 241	Test Acc: 71.43	Relu Count: 51283	Alpha: 0.000081	
+Epochs: 242	Test Acc: 71.21	Relu Count: 50793	Alpha: 0.000081	
+Epochs: 243	Test Acc: 71.24	Relu Count: 50967	Alpha: 0.000081	
+Epochs: 244	Test Acc: 71.01	Relu Count: 50146	Alpha: 0.000090	
+Epochs: 245	Test Acc: 70.86	Relu Count: 49855	Alpha: 0.000090	
+Epochs: 246	Test Acc: 71.53	Relu Count: 49613	Alpha: 0.000090	
+Epochs: 247	Test Acc: 70.55	Relu Count: 49667	Alpha: 0.000090	
+Epochs: 248	Test Acc: 70.62	Relu Count: 48622	Alpha: 0.000098	
+Epochs: 249	Test Acc: 71.04	Relu Count: 48471	Alpha: 0.000098	
+Epochs: 250	Test Acc: 71.54	Relu Count: 48313	Alpha: 0.000098	
+Epochs: 251	Test Acc: 70.19	Relu Count: 47921	Alpha: 0.000098	
+Epochs: 252	Test Acc: 70.68	Relu Count: 47460	Alpha: 0.000098	
+Epochs: 253	Test Acc: 70.63	Relu Count: 47537	Alpha: 0.000098	
+Epochs: 254	Test Acc: 69.94	Relu Count: 46695	Alpha: 0.000108	
+Epochs: 255	Test Acc: 70.97	Relu Count: 46414	Alpha: 0.000108	
+Epochs: 256	Test Acc: 70.04	Relu Count: 46315	Alpha: 0.000108	
+Epochs: 257	Test Acc: 70.63	Relu Count: 46291	Alpha: 0.000108	
+Epochs: 258	Test Acc: 70.85	Relu Count: 46012	Alpha: 0.000108	
+Epochs: 259	Test Acc: 70.85	Relu Count: 45744	Alpha: 0.000108	
+Epochs: 260	Test Acc: 69.9	Relu Count: 45314	Alpha: 0.000108	
+Epochs: 261	Test Acc: 70.47	Relu Count: 45619	Alpha: 0.000108	
+Epochs: 262	Test Acc: 70.17	Relu Count: 44498	Alpha: 0.000119	
+Epochs: 263	Test Acc: 69.49	Relu Count: 44338	Alpha: 0.000119	
+Epochs: 264	Test Acc: 70.06	Relu Count: 44154	Alpha: 0.000119	
+Epochs: 265	Test Acc: 70.68	Relu Count: 43939	Alpha: 0.000119	
+Epochs: 266	Test Acc: 69.88	Relu Count: 43722	Alpha: 0.000119	
+Epochs: 267	Test Acc: 70.5	Relu Count: 43524	Alpha: 0.000119	
+Epochs: 268	Test Acc: 70.44	Relu Count: 43242	Alpha: 0.000119	
+Epochs: 269	Test Acc: 69.42	Relu Count: 43230	Alpha: 0.000119	
+Epochs: 270	Test Acc: 70.26	Relu Count: 42999	Alpha: 0.000119	
+Epochs: 271	Test Acc: 70.77	Relu Count: 42973	Alpha: 0.000119	
+Epochs: 272	Test Acc: 69.52	Relu Count: 42626	Alpha: 0.000119	
+Epochs: 273	Test Acc: 67.91	Relu Count: 42417	Alpha: 0.000119	
+Epochs: 274	Test Acc: 70.26	Relu Count: 42135	Alpha: 0.000119	
+Epochs: 275	Test Acc: 70.14	Relu Count: 42078	Alpha: 0.000119	
+Epochs: 276	Test Acc: 69.33	Relu Count: 42107	Alpha: 0.000119	
+Epochs: 277	Test Acc: 69.09	Relu Count: 41145	Alpha: 0.000131	
+Epochs: 278	Test Acc: 69.07	Relu Count: 40793	Alpha: 0.000131	
+Epochs: 279	Test Acc: 68.62	Relu Count: 40947	Alpha: 0.000131	
+Epochs: 280	Test Acc: 69.53	Relu Count: 40087	Alpha: 0.000144	
+Epochs: 281	Test Acc: 70.03	Relu Count: 39807	Alpha: 0.000144	
+Epochs: 282	Test Acc: 69.59	Relu Count: 39578	Alpha: 0.000144	
+Epochs: 283	Test Acc: 69.04	Relu Count: 39501	Alpha: 0.000144	
+Epochs: 284	Test Acc: 67.09	Relu Count: 39177	Alpha: 0.000144	
+Epochs: 285	Test Acc: 69.1	Relu Count: 39101	Alpha: 0.000144	
+Epochs: 286	Test Acc: 69.26	Relu Count: 38897	Alpha: 0.000144	
+Epochs: 287	Test Acc: 67.09	Relu Count: 38858	Alpha: 0.000144	
+Epochs: 288	Test Acc: 69.44	Relu Count: 38616	Alpha: 0.000144	
+Epochs: 289	Test Acc: 68.33	Relu Count: 38612	Alpha: 0.000144	
+Epochs: 290	Test Acc: 68.19	Relu Count: 38443	Alpha: 0.000144	
+Epochs: 291	Test Acc: 69.14	Relu Count: 38253	Alpha: 0.000144	
+Epochs: 292	Test Acc: 68.11	Relu Count: 38427	Alpha: 0.000144	
+Epochs: 293	Test Acc: 69.09	Relu Count: 37454	Alpha: 0.000159	
+Epochs: 294	Test Acc: 69.13	Relu Count: 37129	Alpha: 0.000159	
+Epochs: 295	Test Acc: 69.45	Relu Count: 37163	Alpha: 0.000159	
+Epochs: 296	Test Acc: 68.59	Relu Count: 36422	Alpha: 0.000174	
+Epochs: 297	Test Acc: 68.69	Relu Count: 36452	Alpha: 0.000174	
+Epochs: 298	Test Acc: 68.07	Relu Count: 35712	Alpha: 0.000192	
+Epochs: 299	Test Acc: 68.85	Relu Count: 35651	Alpha: 0.000192	
+Epochs: 300	Test Acc: 68.26	Relu Count: 35298	Alpha: 0.000192	
+Epochs: 301	Test Acc: 68.3	Relu Count: 35238	Alpha: 0.000192	
+Epochs: 302	Test Acc: 68.46	Relu Count: 35194	Alpha: 0.000192	
+Epochs: 303	Test Acc: 67.94	Relu Count: 34869	Alpha: 0.000192	
+Epochs: 304	Test Acc: 68.2	Relu Count: 34746	Alpha: 0.000192	
+Epochs: 305	Test Acc: 68.53	Relu Count: 34698	Alpha: 0.000192	
+Epochs: 306	Test Acc: 68.8	Relu Count: 34540	Alpha: 0.000192	
+Epochs: 307	Test Acc: 68.38	Relu Count: 34501	Alpha: 0.000192	
+Epochs: 308	Test Acc: 67.84	Relu Count: 34333	Alpha: 0.000192	
+Epochs: 309	Test Acc: 67.83	Relu Count: 34169	Alpha: 0.000192	
+Epochs: 310	Test Acc: 67.7	Relu Count: 33842	Alpha: 0.000192	
+Epochs: 311	Test Acc: 66.55	Relu Count: 33938	Alpha: 0.000192	
+Epochs: 312	Test Acc: 68.08	Relu Count: 33280	Alpha: 0.000211	
+Epochs: 313	Test Acc: 68.2	Relu Count: 33247	Alpha: 0.000211	
+Epochs: 314	Test Acc: 68.7	Relu Count: 32996	Alpha: 0.000211	
+Epochs: 315	Test Acc: 68.34	Relu Count: 33051	Alpha: 0.000211	
+Epochs: 316	Test Acc: 67.61	Relu Count: 32187	Alpha: 0.000232	
+Epochs: 317	Test Acc: 67.56	Relu Count: 32264	Alpha: 0.000232	
+Epochs: 318	Test Acc: 68.29	Relu Count: 31704	Alpha: 0.000255	
+Epochs: 319	Test Acc: 67.24	Relu Count: 31463	Alpha: 0.000255	
+Epochs: 320	Test Acc: 66.89	Relu Count: 31348	Alpha: 0.000255	
+Epochs: 321	Test Acc: 67.32	Relu Count: 31161	Alpha: 0.000255	
+Epochs: 322	Test Acc: 67.4	Relu Count: 30859	Alpha: 0.000255	
+Epochs: 323	Test Acc: 67.9	Relu Count: 30907	Alpha: 0.000255	
+Epochs: 324	Test Acc: 67.72	Relu Count: 30569	Alpha: 0.000281	
+Epochs: 325	Test Acc: 67.6	Relu Count: 30224	Alpha: 0.000281	
+Epochs: 326	Test Acc: 66.61	Relu Count: 30028	Alpha: 0.000281	
+Epochs: 327	Test Acc: 68.19	Relu Count: 29939	Alpha: 0.000281	
+Epochs: 328	Test Acc: 67.87	Relu Count: 29798	Alpha: 0.000281	
+Epochs: 329	Test Acc: 66.68	Relu Count: 29719	Alpha: 0.000281	
+Epochs: 330	Test Acc: 67.5	Relu Count: 29661	Alpha: 0.000281	
+Epochs: 331	Test Acc: 67.03	Relu Count: 29322	Alpha: 0.000281	
+Epochs: 332	Test Acc: 66.39	Relu Count: 29293	Alpha: 0.000281	
+Epochs: 333	Test Acc: 67.31	Relu Count: 29301	Alpha: 0.000281	
+Epochs: 334	Test Acc: 66.16	Relu Count: 28636	Alpha: 0.000309	
+Epochs: 335	Test Acc: 65.65	Relu Count: 28485	Alpha: 0.000309	
+Epochs: 336	Test Acc: 66.69	Relu Count: 28440	Alpha: 0.000309	
+Epochs: 337	Test Acc: 67.33	Relu Count: 28470	Alpha: 0.000309	
+Epochs: 338	Test Acc: 66.86	Relu Count: 27802	Alpha: 0.000340	
+Epochs: 339	Test Acc: 66.11	Relu Count: 27569	Alpha: 0.000340	
+Epochs: 340	Test Acc: 66.39	Relu Count: 27660	Alpha: 0.000340	
+Epochs: 341	Test Acc: 64.27	Relu Count: 27057	Alpha: 0.000374	
+Epochs: 342	Test Acc: 63.49	Relu Count: 26808	Alpha: 0.000374	
+Epochs: 343	Test Acc: 64.98	Relu Count: 26792	Alpha: 0.000374	
+Epochs: 344	Test Acc: 67.15	Relu Count: 26594	Alpha: 0.000374	
+Epochs: 345	Test Acc: 64.3	Relu Count: 26523	Alpha: 0.000374	
+Epochs: 346	Test Acc: 64.97	Relu Count: 26287	Alpha: 0.000374	
+Epochs: 347	Test Acc: 65.89	Relu Count: 26294	Alpha: 0.000374	
+Epochs: 348	Test Acc: 66.7	Relu Count: 25893	Alpha: 0.000411	
+Epochs: 349	Test Acc: 64.65	Relu Count: 25641	Alpha: 0.000411	
+Epochs: 350	Test Acc: 65.96	Relu Count: 25530	Alpha: 0.000411	
+Epochs: 351	Test Acc: 66.86	Relu Count: 25501	Alpha: 0.000411	
+Epochs: 352	Test Acc: 66.3	Relu Count: 25197	Alpha: 0.000411	
+Epochs: 353	Test Acc: 65.98	Relu Count: 25136	Alpha: 0.000411	
+Epochs: 354	Test Acc: 65.79	Relu Count: 25049	Alpha: 0.000411	
+Epochs: 355	Test Acc: 66.49	Relu Count: 24986	Alpha: 0.000411	
+Epochs: 356	Test Acc: 65.84	Relu Count: 24876	Alpha: 0.000411	
+Epochs: 357	Test Acc: 66.97	Relu Count: 24770	Alpha: 0.000411	
+Epochs: 358	Test Acc: 66.31	Relu Count: 24534	Alpha: 0.000411	
+Epochs: 359	Test Acc: 66.2	Relu Count: 24540	Alpha: 0.000411	
+Epochs: 360	Test Acc: 66.23	Relu Count: 24017	Alpha: 0.000453	
+Epochs: 361	Test Acc: 64.64	Relu Count: 23957	Alpha: 0.000453	
+Epochs: 362	Test Acc: 66.24	Relu Count: 23878	Alpha: 0.000453	
+Epochs: 363	Test Acc: 66.03	Relu Count: 23743	Alpha: 0.000453	
+Epochs: 364	Test Acc: 64.77	Relu Count: 23567	Alpha: 0.000453	
+Epochs: 365	Test Acc: 66.48	Relu Count: 23625	Alpha: 0.000453	
+Epochs: 366	Test Acc: 65.53	Relu Count: 23151	Alpha: 0.000498	
+Epochs: 367	Test Acc: 65.67	Relu Count: 23089	Alpha: 0.000498	
+Epochs: 368	Test Acc: 64.91	Relu Count: 22881	Alpha: 0.000498	
+Epochs: 369	Test Acc: 63.03	Relu Count: 22810	Alpha: 0.000498	
+Epochs: 370	Test Acc: 65.96	Relu Count: 22761	Alpha: 0.000498	
+Epochs: 371	Test Acc: 64.71	Relu Count: 22658	Alpha: 0.000498	
+Epochs: 372	Test Acc: 65.47	Relu Count: 22771	Alpha: 0.000498	
+Epochs: 373	Test Acc: 66.1	Relu Count: 22169	Alpha: 0.000548	
+Epochs: 374	Test Acc: 65.66	Relu Count: 22049	Alpha: 0.000548	
+Epochs: 375	Test Acc: 66.08	Relu Count: 22092	Alpha: 0.000548	
+Epochs: 376	Test Acc: 63.35	Relu Count: 21496	Alpha: 0.000602	
+Epochs: 377	Test Acc: 64.12	Relu Count: 21469	Alpha: 0.000602	
+Epochs: 378	Test Acc: 64.18	Relu Count: 21300	Alpha: 0.000602	
+Epochs: 379	Test Acc: 66.27	Relu Count: 21291	Alpha: 0.000602	
+Epochs: 380	Test Acc: 64.65	Relu Count: 21294	Alpha: 0.000602	
+Epochs: 381	Test Acc: 64.66	Relu Count: 20781	Alpha: 0.000663	
+Epochs: 382	Test Acc: 64.68	Relu Count: 20676	Alpha: 0.000663	
+Epochs: 383	Test Acc: 63.57	Relu Count: 20592	Alpha: 0.000663	
+Epochs: 384	Test Acc: 62.91	Relu Count: 20453	Alpha: 0.000663	
+Epochs: 385	Test Acc: 62.14	Relu Count: 20386	Alpha: 0.000663	
+Epochs: 386	Test Acc: 63.81	Relu Count: 20366	Alpha: 0.000663	
+Epochs: 387	Test Acc: 57.66	Relu Count: 20259	Alpha: 0.000663	
+Epochs: 388	Test Acc: 63.92	Relu Count: 20110	Alpha: 0.000663	
+Epochs: 389	Test Acc: 63.33	Relu Count: 20076	Alpha: 0.000663	
+Epochs: 390	Test Acc: 64.11	Relu Count: 19888	Alpha: 0.000663	
+Epochs: 391	Test Acc: 64.14	Relu Count: 19884	Alpha: 0.000663	
+Epochs: 392	Test Acc: 60.72	Relu Count: 19824	Alpha: 0.000663	
+Epochs: 393	Test Acc: 64.45	Relu Count: 19773	Alpha: 0.000663	
+Epochs: 394	Test Acc: 64.5	Relu Count: 19711	Alpha: 0.000663	
+Epochs: 395	Test Acc: 64.17	Relu Count: 19642	Alpha: 0.000663	
+Epochs: 396	Test Acc: 61.78	Relu Count: 19515	Alpha: 0.000663	
+Epochs: 397	Test Acc: 63.33	Relu Count: 19444	Alpha: 0.000663	
+Epochs: 398	Test Acc: 64.58	Relu Count: 19279	Alpha: 0.000663	
+Epochs: 399	Test Acc: 64.79	Relu Count: 19190	Alpha: 0.000663	
+Epochs: 400	Test Acc: 65.2	Relu Count: 19188	Alpha: 0.000663	
+Epochs: 401	Test Acc: 62.21	Relu Count: 19013	Alpha: 0.000663	
+Epochs: 402	Test Acc: 63.96	Relu Count: 19114	Alpha: 0.000663	
+Epochs: 403	Test Acc: 62.67	Relu Count: 18497	Alpha: 0.000729	
+Epochs: 404	Test Acc: 62.39	Relu Count: 18560	Alpha: 0.000729	
+Epochs: 405	Test Acc: 62.13	Relu Count: 18183	Alpha: 0.000802	
+Epochs: 406	Test Acc: 62.93	Relu Count: 18072	Alpha: 0.000802	
+Epochs: 407	Test Acc: 62.38	Relu Count: 18045	Alpha: 0.000802	
+Epochs: 408	Test Acc: 64.3	Relu Count: 17913	Alpha: 0.000802	
+Epochs: 409	Test Acc: 63.27	Relu Count: 17902	Alpha: 0.000802	
+Epochs: 410	Test Acc: 62.53	Relu Count: 17791	Alpha: 0.000802	
+Epochs: 411	Test Acc: 59.77	Relu Count: 17648	Alpha: 0.000802	
+Epochs: 412	Test Acc: 62.35	Relu Count: 17676	Alpha: 0.000802	
+Epochs: 413	Test Acc: 63.55	Relu Count: 17214	Alpha: 0.000882	
+Epochs: 414	Test Acc: 63.68	Relu Count: 17187	Alpha: 0.000882	
+Epochs: 415	Test Acc: 63.67	Relu Count: 17133	Alpha: 0.000882	
+Epochs: 416	Test Acc: 62.95	Relu Count: 17029	Alpha: 0.000882	
+Epochs: 417	Test Acc: 62.87	Relu Count: 16945	Alpha: 0.000882	
+Epochs: 418	Test Acc: 63.05	Relu Count: 16849	Alpha: 0.000882	
+Epochs: 419	Test Acc: 63.83	Relu Count: 16759	Alpha: 0.000882	
+Epochs: 420	Test Acc: 62.38	Relu Count: 16660	Alpha: 0.000882	
+Epochs: 421	Test Acc: 62.94	Relu Count: 16556	Alpha: 0.000882	
+Epochs: 422	Test Acc: 58.77	Relu Count: 16594	Alpha: 0.000882	
+Epochs: 423	Test Acc: 63.07	Relu Count: 16257	Alpha: 0.000970	
+Epochs: 424	Test Acc: 59.9	Relu Count: 16110	Alpha: 0.000970	
+Epochs: 425	Test Acc: 62.56	Relu Count: 16068	Alpha: 0.000970	
+Epochs: 426	Test Acc: 62.81	Relu Count: 15930	Alpha: 0.000970	
+Epochs: 427	Test Acc: 61.65	Relu Count: 15793	Alpha: 0.000970	
+Epochs: 428	Test Acc: 59.02	Relu Count: 15834	Alpha: 0.000970	
+Epochs: 429	Test Acc: 61.25	Relu Count: 15494	Alpha: 0.001067	
+Epochs: 430	Test Acc: 62.24	Relu Count: 15457	Alpha: 0.001067	
+Epochs: 431	Test Acc: 61.38	Relu Count: 15372	Alpha: 0.001067	
+Epochs: 432	Test Acc: 61.16	Relu Count: 15281	Alpha: 0.001067	
+Epochs: 433	Test Acc: 60.15	Relu Count: 15119	Alpha: 0.001067	
+Epochs: 434	Test Acc: 61.57	Relu Count: 15212	Alpha: 0.001067	
+Epochs: 435	Test Acc: 61.25	Relu Count: 14821	Alpha: 0.001174	
+Epochs: 436	Test Acc: 60.78	Relu Count: 14662	Alpha: 0.001174	
+Epochs: 437	Test Acc: 61.5	Relu Count: 14662	Alpha: 0.001174	
+Epochs: 438	Test Acc: 59.9	Relu Count: 14327	Alpha: 0.001291	
+Epochs: 439	Test Acc: 60.74	Relu Count: 14298	Alpha: 0.001291	
+Epochs: 440	Test Acc: 60.35	Relu Count: 14128	Alpha: 0.001291	
+Epochs: 441	Test Acc: 58.31	Relu Count: 14096	Alpha: 0.001291	
+Epochs: 442	Test Acc: 59.08	Relu Count: 14037	Alpha: 0.001291	
+Epochs: 443	Test Acc: 57.55	Relu Count: 14059	Alpha: 0.001291	
+Epochs: 444	Test Acc: 61.81	Relu Count: 13622	Alpha: 0.001420	
+Epochs: 445	Test Acc: 57.2	Relu Count: 13651	Alpha: 0.001420	
+Epochs: 446	Test Acc: 57.38	Relu Count: 13254	Alpha: 0.001562	
+Epochs: 447	Test Acc: 58.35	Relu Count: 13274	Alpha: 0.001562	
+Epochs: 448	Test Acc: 59.91	Relu Count: 12849	Alpha: 0.001719	
+Epochs: 449	Test Acc: 57.84	Relu Count: 12810	Alpha: 0.001719	
+Epochs: 450	Test Acc: 59.25	Relu Count: 12715	Alpha: 0.001719	
+Epochs: 451	Test Acc: 46.38	Relu Count: 12652	Alpha: 0.001719	
+Epochs: 452	Test Acc: 55.4	Relu Count: 12570	Alpha: 0.001719	
+Epochs: 453	Test Acc: 57.22	Relu Count: 12572	Alpha: 0.001719	
+Epochs: 454	Test Acc: 59.18	Relu Count: 12229	Alpha: 0.001891	
+Epochs: 455	Test Acc: 59.13	Relu Count: 12127	Alpha: 0.001891	
+Epochs: 456	Test Acc: 56.36	Relu Count: 12101	Alpha: 0.001891	
+Epochs: 457	Test Acc: 59.53	Relu Count: 11935	Alpha: 0.001891	
+Epochs: 458	Test Acc: 55.28	Relu Count: 11904	Alpha: 0.001891	
+Epochs: 459	Test Acc: 57.26	Relu Count: 11819	Alpha: 0.001891	
+Epochs: 460	Test Acc: 57.09	Relu Count: 11884	Alpha: 0.001891	
+Epochs: 461	Test Acc: 58.49	Relu Count: 11519	Alpha: 0.002080	
+Epochs: 462	Test Acc: 57.76	Relu Count: 11530	Alpha: 0.002080	
+Epochs: 463	Test Acc: 55.52	Relu Count: 11145	Alpha: 0.002288	
+Epochs: 464	Test Acc: 52.31	Relu Count: 11066	Alpha: 0.002288	
+Epochs: 465	Test Acc: 57.99	Relu Count: 10857	Alpha: 0.002288	
+Epochs: 466	Test Acc: 55.85	Relu Count: 10782	Alpha: 0.002288	
+Epochs: 467	Test Acc: 57.29	Relu Count: 10730	Alpha: 0.002288	
+Epochs: 468	Test Acc: 54.86	Relu Count: 10711	Alpha: 0.002288	
+Epochs: 469	Test Acc: 55.79	Relu Count: 10666	Alpha: 0.002288	
+Epochs: 470	Test Acc: 55.29	Relu Count: 10575	Alpha: 0.002288	
+Epochs: 471	Test Acc: 56.09	Relu Count: 10535	Alpha: 0.002288	
+Epochs: 472	Test Acc: 55.79	Relu Count: 10535	Alpha: 0.002288	
+Epochs: 473	Test Acc: 54.81	Relu Count: 10218	Alpha: 0.002516	
+Epochs: 474	Test Acc: 55.16	Relu Count: 10021	Alpha: 0.002516	
+Epochs: 475	Test Acc: 55.39	Relu Count: 10057	Alpha: 0.002516	
+Epochs: 476	Test Acc: 49.89	Relu Count: 9754	Alpha: 0.002768	
+Epochs: 477	Test Acc: 55.0	Relu Count: 9632	Alpha: 0.002768	
+Epochs: 478	Test Acc: 54.85	Relu Count: 9601	Alpha: 0.002768	
+Epochs: 479	Test Acc: 51.94	Relu Count: 9514	Alpha: 0.002768	
+Epochs: 480	Test Acc: 54.06	Relu Count: 9398	Alpha: 0.002768	
+Epochs: 481	Test Acc: 51.71	Relu Count: 9369	Alpha: 0.002768	
+Epochs: 482	Test Acc: 52.34	Relu Count: 9270	Alpha: 0.002768	
+Epochs: 483	Test Acc: 51.97	Relu Count: 9229	Alpha: 0.002768	
+Epochs: 484	Test Acc: 54.44	Relu Count: 9205	Alpha: 0.002768	
+Epochs: 485	Test Acc: 51.77	Relu Count: 9113	Alpha: 0.002768	
+Epochs: 486	Test Acc: 52.39	Relu Count: 9081	Alpha: 0.002768	
+Epochs: 487	Test Acc: 55.32	Relu Count: 9025	Alpha: 0.002768	
+Epochs: 488	Test Acc: 50.84	Relu Count: 8967	Alpha: 0.002768	
+After SNL Algorithm, the current ReLU Count: 8967, rel. count:0.01824340783059597
+Finetuning the model
+Final best Prec@1 = 62.79%

@@ -68,7 +68,7 @@ if args.budegt_type == 'relative' and args.relu_budget > 1:
 def relu_counting(net, args):
     relu_count = 0
     for name, param in net.named_parameters():
-        if 'alpha' in name:
+        if 'alphas' in name:
             boolean_list = param.data > args.threshold
             relu_count += (boolean_list == 1).sum()
     return relu_count
@@ -105,7 +105,11 @@ def main():
     # Loading the base_classifier
     base_classifier = get_architecture(args.arch, args.dataset, device, args)
     checkpoint = torch.load(args.savedir, map_location=device)
-    base_classifier.load_state_dict(checkpoint['state_dict'])
+    """
+    WARNING: I added strict=False here to handle the case that the base model does not contain parameters which we want
+    to selectively learn.
+    """
+    base_classifier.load_state_dict(checkpoint['state_dict'], strict=False)
     base_classifier.eval()
 
     log(logfilename, "Loaded the base_classifier")
@@ -170,6 +174,8 @@ def main():
 
     # Line 11: Threshold and freeze alpha
     for name, param in net.named_parameters():
+        if 'beta' in name:
+            param.requires_grad = False
         if 'alpha' in name:
             boolean_list = param.data > args.threshold
             param.data = boolean_list.float()

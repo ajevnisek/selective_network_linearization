@@ -1,0 +1,1 @@
+python3 train_unstructured.py 'cifar100-new-split' 'resnet18_in' './pretrained_models/cifar100-new-split2/resnet18_in' --gpu 0

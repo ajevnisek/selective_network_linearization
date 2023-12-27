@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 
 
 # list of all datasets
-DATASETS = ["imagenet", "cifar10", "cifar100", "mnist", "fashion_mnist", "tiny_imagenet"]
+DATASETS = ["imagenet", "cifar10", "cifar100", "cifar100-new-split", "mnist", "fashion_mnist", "tiny_imagenet"]
 
 
 def get_dataset(dataset: str, split: str) -> Dataset:
@@ -17,6 +17,8 @@ def get_dataset(dataset: str, split: str) -> Dataset:
         return _cifar10(split)
     elif dataset == "cifar100":
         return _cifar100(split)
+    elif dataset == "cifar100-new-split":
+    	return _cifar100_new_split(split)
     elif dataset == "mnist":
         return _mnist10(split)
     elif dataset == "tiny_imagenet":
@@ -33,6 +35,8 @@ def get_num_classes(dataset: str):
         return 10
     elif dataset == "cifar100":
         return 100
+    elif dataset == "cifar100-new-split":
+    	return 100
     elif dataset == "mnist":
         return 10
     elif dataset == "fashion_mnist":
@@ -109,8 +113,58 @@ def _cifar100(split: str) -> Dataset:
         return datasets.CIFAR100("./dataset_cache", train=False, download=True, transform=transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
-        ])) 
-    
+        ]))
+class CIFAR100WithValSplit(datasets.CIFAR10):
+    """`CIFAR100 <https://www.cs.toronto.edu/~kriz/cifar.html>`_ Dataset.
+
+    This is a subclass of the `CIFAR10` Dataset.
+    """
+
+    base_folder = 'cifar-100-python'
+    url = 'https://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
+    filename = 'cifar-100-python.tar.gz'
+    tgz_md5 = 'eb9058c3a382ffc7106e4002c42a8d85'
+    train_list = [
+        ['train', '00b4df24681b7c4d4bc8f0f49f25beda'],
+    ]
+    val_list = [
+        ['val', 'e9d24a4dd8ade6737b0abffab85f94eb']
+    ]
+
+    test_list = [
+        ['test', '588fa8d951f0154158c16e9e46129698'],
+    ]
+    meta = {
+        'filename': 'meta',
+        'key': 'fine_label_names',
+        'md5': '1580defa312ed3539344f148645d707a',
+    }
+
+
+def _cifar100_new_split(split: str) -> Dataset:
+    if split == "train":
+        return CIFAR100WithValSplit("./cifar100-new-split", train=True, download=False, transform=transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+            
+        ]))
+    elif split == "val":
+        """
+        This is certainly not a clean way to do this, but I wanted to stay consistent with how the datasets are created here.
+        It's either something like this or change torchvision. I prefer the former.
+        """
+        return CIFAR100WithValSplit("./cifar100-new-split-val", train=False, download=False, transform=transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+            ]))
+
+    elif split == "test":
+        return CIFAR100WithValSplit("./cifar100-new-split", train=False, download=False, transform=transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+        ]))
 
 
 def _imagenet(split: str) -> Dataset:

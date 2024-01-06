@@ -110,6 +110,16 @@ def main():
     to selectively learn.
     """
     base_classifier.load_state_dict(checkpoint['state_dict'], strict=False)
+    if args.block_type in ['LearnableAlphaAndBetaNewAlgorithm', 'LearnableAlphaBetaGamma']:
+        # new_lr = checkpoint['optimizer']['param_groups'][0]['lr']
+        # log(logfilename, f"Changing learning rate from {args.lr} to {new_lr}")
+        # args.lr = new_lr
+        for layer in [f'layer{i}' for i in range(1, 4 + 1)]:
+            for block_index in [0, 1]:
+                for alpha_index in [1, 2]:
+                    base_classifier.get_submodule(layer)[block_index].get_submodule(
+                        f'alpha{alpha_index}').set_default_params_beta_and_gamma()
+
     base_classifier.eval()
 
     log(logfilename, "Loaded the base_classifier")
@@ -117,7 +127,6 @@ def main():
     # Calculating the loaded model's test accuracy.
     original_acc = model_inference(base_classifier, test_loader,
                                     device, display=True)
-    
     log(logfilename, "Original Model Test Accuracy: {:.5}".format(original_acc))
 
     # Creating a fresh copy of network not affecting the original network.
@@ -171,7 +180,12 @@ def main():
             break
 
     log(logfilename, "After SNL Algorithm, the current ReLU Count: {}, rel. count:{}".format(relu_count, relu_count/total))
-
+    log(logfilename, "Saving Model before fine-tuning to checkpoint...")
+    torch.save({
+        'arch': args.arch,
+        'state_dict': net.state_dict(),
+        'optimizer': optimizer.state_dict(),
+    }, os.path.join(args.outdir, f'snl_before_finetuning_checkpoint_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
     # Line 11: Threshold and freeze alpha
     for name, param in net.named_parameters():
         if 'beta' in name:
@@ -214,5 +228,6 @@ def main():
     print("Final best Prec@1 = {}%".format(best_top1))
     log(logfilename, "Final best Prec@1 = {}%".format(best_top1))
         
+
 if __name__ == "__main__":
     main()

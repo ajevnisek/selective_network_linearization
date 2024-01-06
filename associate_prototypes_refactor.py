@@ -25,15 +25,6 @@ from collections import OrderedDict
 CORRELATION_THRESHOLD = 0.9
 CREATE_PLOT_ARTIFACTS = True
 
-def parse_args():
-    args = argparse.ArgumentParser()
-
-    args.add_argument("teacher_model_checkpoint_path", type=str, help='path to the checkpoint of the teacher model')
-    args.add_argument("")
-
-    return args.parse_args()
-
-
 def mul_iterable(iterable):
     result = 1
     if len(iterable) == 0:

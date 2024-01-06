@@ -13,3 +13,4 @@ retraining_after_alpha_thresholding/
 docker_outputs
 cifar100-new-split
 cifar100-new-split-val
+output/

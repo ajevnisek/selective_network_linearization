@@ -8,7 +8,7 @@ docker push ajevnisek/snl-amir:v4
 2. Then run the docker:
 On the A5000:
 ```shell
-docker run --gpus all -v $(pwd):/local_code/ -e EXPORT_SCRIPT=/local_code/scripts/optimize_and_reduce/exports/relu_target_15000-step_reduce_100-random_tries_100-reduce_threshold_0.5.sh -e RUN_SCRIPT=/local_code/scripts/optimize_and_reduce/optimize_and_reduce_runner.sh  -it ajevnisek/snl-amir:v4
+docker run --gpus all -v $(pwd):/local_code/ -e EXPORT_SCRIPT=/local_code/scripts/optimize_and_reduce/exports/relu_target_15000-step_reduce_100-random_tries_100-reduce_threshold_0.5_greedier.sh -e RUN_SCRIPT=/local_code/scripts/optimize_and_reduce/optimize_and_reduce_runner.sh  -it ajevnisek/snl-amir:v4
 ```
 On runai:
 ```shell

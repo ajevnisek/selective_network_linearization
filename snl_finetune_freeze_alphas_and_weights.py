@@ -35,8 +35,12 @@ parser.add_argument('--epochs', default=2000, type=int)
 parser.add_argument('--batch', default=256, type=int, metavar='N',
                     help='batchsize (default: 256)')
 parser.add_argument('--logname', type=str, default='log.txt')
-parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
-                    help='initial learning rate', dest='lr')
+parser.add_argument('--lr_beta', '--learning-rate', default=0.001, type=float,
+                    help='initial learning rate', dest='lr_beta')
+parser.add_argument('--lr_snl', '--learning-rate-snl', default=0.001, type=float,
+                    help='initial learning rate for snl step', dest='lr_snl')
+parser.add_argument('--lr_finetune', '--learning-rate-finetune', default=0.001, type=float,
+                    help='initial learning rate for finetune step', dest='lr_finetune')
 parser.add_argument('--alpha', default=1e-5, type=float,
                     help='Lasso coefficient')
 parser.add_argument('--threshold', default=1e-2, type=float)
@@ -57,7 +61,14 @@ parser.add_argument('--print-freq', default=100, type=int,
 parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
 parser.add_argument('--block_type', type=str, default='LearnableAlpha')
 parser.add_argument('--num_of_neighbors', type=int, default=4)
+parser.add_argument('--noise_init_for_betas', type=float, default=0)
+parser.add_argument('--freeze_alphas_and_weights', action="store_true")
 parser.add_argument('--beta_epochs', type=int, default=5)
+parser.add_argument('--xavier_init_weights', action="store_true")
+parser.add_argument('--ones_init_weights', action="store_true")
+
+#
+#
 args = parser.parse_args()
 
 
@@ -80,6 +91,7 @@ def main():
         os.makedirs(args.outdir)
 
     device = torch.device("cuda")
+    print(args.noise_init_for_betas)
     torch.cuda.set_device(args.gpu)
 
     logfilename = os.path.join(args.outdir, args.logname)
@@ -89,10 +101,14 @@ def main():
     log(logfilename, "Architecture: {:}".format(args.arch))
     log(logfilename, "ReLU Budget: {:}".format(args.relu_budget))
     log(logfilename, "Finetune Epochs: {:}".format(args.finetune_epochs))
-    log(logfilename, "Learning Rate: {:}".format(args.lr))
+    log(logfilename, "Learning Rate: {:}".format(args.lr_snl))
     log(logfilename, "Alpha: {:}".format(args.alpha))
     log(logfilename, "Block Type: {:}".format(args.block_type))
     log(logfilename, "Num of Neighbours: {:}".format(args.num_of_neighbors if args.block_type != 'LearnableAlpha' else 0))
+    if args.freeze_alphas_and_weights:
+        log(logfilename, "Freezing alphas and weights, before training betas")
+    else:
+        log(logfilename, "Freezing alphas and training betas+weights")
 
     train_dataset = get_dataset(args.dataset, 'train')
     test_dataset = get_dataset(args.dataset, 'test')
@@ -145,9 +161,9 @@ def main():
     # Line 12: Finetuing the network
     finetune_epoch = args.finetune_epochs
 
-    optimizer = SGD(net.parameters(), lr=1e-3, momentum=args.momentum, weight_decay=args.weight_decay)
+    optimizer = SGD(net.parameters(), lr=args.lr_beta, momentum=args.momentum, weight_decay=args.weight_decay)
     criterion = nn.CrossEntropyLoss().to(device)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, args.beta_epochs)
     
     print("Finetuning the model")
     log(logfilename, "Finetuning the model")
@@ -156,13 +172,40 @@ def main():
     This section optimizes the beta parameters.
     '''
     # Alpha is the masking parameters initialized to 1. Enabling the grad.
+    if args.freeze_alphas_and_weights:
+        for name, param in net.named_parameters():
+                param.requires_grad = False
+    else:
+        for name, param in net.named_parameters():
+            if 'alpha' in name:
+                param.requires_grad = False
+
     for name, param in net.named_parameters():
         if 'beta' in name:
             param.requires_grad = True
-    for name, param in net.named_parameters():
-        if 'alphas' in name:
-            param.requires_grad = False
+            param.data += torch.rand(param.data.shape).to(device) * args.noise_init_for_betas
+    if args.xavier_init_weights:
+        for name, param in net.named_parameters():
+            if 'beta' in name:
+                param.requires_grad = True
+                torch.nn.init.xavier_uniform(param.data)
+    elif args.ones_init_weights:
+        for name, param in net.named_parameters():
+            if 'beta' in name:
+                param.requires_grad = True
+                param.data.fill_(1.0)
 
+    for name, param in net.named_parameters():
+        if 'gamma' in name:
+            param.requires_grad = True
+
+    after_init_acc = model_inference(net, test_loader,
+                                   device, display=True)
+    log(logfilename, "After init, Test Accuracy: {:.5}".format(after_init_acc))
+
+    relu_count = relu_counting(net, args)
+
+    log(logfilename, "After init ReLU Count: {}".format(relu_count))
     best_top1 = 0
     for epoch in range(args.beta_epochs):
         train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
@@ -181,7 +224,7 @@ def main():
                     'arch': args.arch,
                     'state_dict': net.state_dict(),
                     'optimizer': optimizer.state_dict(),
-            }, os.path.join(args.outdir, f'snl_best_checkpoint_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
+            }, os.path.join(args.outdir, f'betas_train_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
 
     print("Final best Prec@1 = {}%".format(best_top1))
     log(logfilename, "After Beta optimization, Final best Prec@1 = {}%".format(best_top1))
@@ -192,17 +235,20 @@ def main():
     This section optimizes the alpha parameters using snl.
     '''
     # Alpha is the masking parameters initialized to 1. Enabling the grad.
-    for name, param in net.named_parameters():
-        if 'alpha' in name:
-            param.requires_grad = True
-
+    if args.freeze_alphas_and_weights:
+        for name, param in net.named_parameters():
+                param.requires_grad = True
+    else:
+        for name, param in net.named_parameters():
+            if 'alpha' in name:
+                param.requires_grad = False
     for name, param in net.named_parameters():
         if 'beta' in name:
             param.requires_grad = False
 
         
     criterion = nn.CrossEntropyLoss().to(device)  
-    optimizer = Adam(net.parameters(), lr=args.lr * 0.01)
+    optimizer = Adam(net.parameters(), lr=args.lr_snl)
     
     # counting number of ReLU.
     total = relu_counting(net, args)
@@ -247,6 +293,8 @@ def main():
     }, os.path.join(args.outdir, f'snl_before_finetuning_checkpoint_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
     # Line 11: Threshold and freeze alpha
     for name, param in net.named_parameters():
+        param.requires_grad = True
+    for name, param in net.named_parameters():
         if 'beta' in name:
             param.requires_grad = False
         if 'alpha' in name:
@@ -258,7 +306,7 @@ def main():
     # Line 12: Finetuing the network
     finetune_epoch = args.finetune_epochs
 
-    optimizer = SGD(net.parameters(), lr=1e-3, momentum=args.momentum, weight_decay=args.weight_decay)
+    optimizer = SGD(net.parameters(), lr=args.lr_finetune, momentum=args.momentum, weight_decay=args.weight_decay)
     criterion = nn.CrossEntropyLoss().to(device)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
     

@@ -4,11 +4,12 @@ then
     --block_type LearnableAlphaAndBetaNoSigmoid --beta_epochs $BETA_EPOCHS --lr_beta $LR_BETA --relu_budget $RELU_BUDGET \
     --noise_init_for_betas 0.001 --lr_snl $LR_SNL --epochs $SNL_EPOCHS  \
     --finetune_epochs $FINETUNE_EPOCHS --lr_finetune $LR_FINETUNE \
-    --freeze_alphas_and_weights ;
+    --freeze_alphas_and_weights --xavier_init_weights;
 else
   python3 snl_finetune_freeze_alphas_and_weights.py $DATASET $ARCH $OUTDIR $INITIAL_CHECKPOINT \
     --block_type LearnableAlphaAndBetaNoSigmoid --beta_epochs $BETA_EPOCHS --lr_beta $LR_BETA --relu_budget $RELU_BUDGET \
-    --noise_init_for_betas 0.001 --lr_snl $LR_SNL --epochs $SNL_EPOCHS --finetune_epochs $FINETUNE_EPOCHS;
+    --noise_init_for_betas 0.001 --lr_snl $LR_SNL --epochs $SNL_EPOCHS --finetune_epochs $FINETUNE_EPOCHS \
+    --xavier_init_weights;
 fi
 
 python3 test_freeze_alpha_network.py $DATASET $ARCH $OUTDIR \

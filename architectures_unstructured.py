@@ -1,14 +1,14 @@
 import torch
 # from torchvision.models.resnet import resnet50
 import torch.backends.cudnn as cudnn
-from archs_unstructured.cifar_resnet import resnet34_in, resnet50_in, resnet18_in, resnet9_in
+from archs_unstructured.cifar_resnet import resnet34_in, resnet50_in, resnet18_in, resnet9_in, resnet18_in_with_exit_at_layer3_relu_0
 from archs_unstructured.cifar_resnet import wide_resnet_22_8, wide_resnet_28_10_drop02
 # from archs.cifar_resnet import wide_resnet_22_8, wide_resnet_22_8_drop02, wide_resnet_28_10_drop02, wide_resnet_28_12_drop02, wide_resnet_16_8_drop02
 from torch.nn.functional import interpolate
 
 
 ARCHITECTURES = ["resnet50", "lenet300", "lenet5", "vgg19", "resnet32", "resnet50", "resnet34_in", "resnet50_in", "vgg16", "lenet_5_caffe", 
-                 "resnet18_in", "wide_resnet_16_8_drop02", "resnet9_in",
+                 "resnet18_in", "wide_resnet_16_8_drop02", "resnet9_in", "resnet18_in_with_exit_at_layer3_relu_0",
                  "wide_resnet_22_8_drop02", "wide_resnet_22_8", "wide_resnet_28_10", "wide_resnet_28_12", "wide_resnet_28_10_drop02", "wide_resnet_28_12_drop02"]
 def get_architecture(arch: str, dataset: str, device, args) -> torch.nn.Module:
     """ Return a neural network (with random weights)
@@ -22,6 +22,8 @@ def get_architecture(arch: str, dataset: str, device, args) -> torch.nn.Module:
         model = resnet9_in(num_classes=100, args=args).to(device)
     elif arch == "resnet18_in" and dataset in ["cifar100", "cifar100-new-split"]:
         model = resnet18_in(num_classes=100, args=args).to(device)
+    elif arch == "resnet18_in_with_exit_at_layer3_relu_0" and dataset in ["cifar100", "cifar100-new-split"]:
+        model = resnet18_in_with_exit_at_layer3_relu_0(num_classes=100, args=args).to(device)
     elif arch == "resnet18_in" and dataset == "cifar10":
         model = resnet18_in(num_classes=10, args=args).to(device)
     elif arch == "resnet18_in" and dataset == "tiny_imagenet":

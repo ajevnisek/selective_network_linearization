@@ -188,7 +188,7 @@ def _imagenet(split: str) -> Dataset:
 
 def _tinyimagenet(split: str) -> Dataset:
     if split == "train":
-        subdir = os.path.join("path/to//tiny-imagenet-200", "train")
+        subdir = os.path.join("./tiny-imagenet-200", "train")
         transform = transforms.Compose([
             transforms.RandomCrop(64, padding=4),
             transforms.RandomHorizontalFlip(),
@@ -196,7 +196,7 @@ def _tinyimagenet(split: str) -> Dataset:
             transforms.Normalize(_TINY_MEAN, _TINY_STD)
         ])
     elif split == "test":
-        subdir = os.path.join("path/to//tiny-imagenet-200", "val")
+        subdir = os.path.join("./tiny-imagenet-200", "val")
         transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(_TINY_MEAN, _TINY_STD)

@@ -1,6 +1,6 @@
 export ARCH=resnet18_in
 export DATASET=cifar100
-export OUTDIR=/local_code/alternating_alphas_and_betas/freeze_alphas_and_weights_little_noise/
+export OUTDIR=/local_code/alternating_alphas_betas_and_gammas/freeze_alphas_and_weights_little_noise/
 export INITIAL_CHECKPOINT=/local_code/checkpoints/snl-15k.pth.tar
 export BETA_EPOCHS=100
 export LR_BETA=0.001

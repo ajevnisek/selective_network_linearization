@@ -64,8 +64,12 @@ parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
 parser.add_argument('--block_type', type=str, default='LearnableAlpha')
 parser.add_argument('--num_of_neighbors', type=int, default=4)
 parser.add_argument('--beta_epochs', type=int, default=5)
-parser.add_argument('--layer_index', type=int, default=5)
-parser.add_argument('--channel_index', type=int, default=5)
+parser.add_argument('--layer_index', type=int, default=1, choices=[1, 2, 3, 4])
+parser.add_argument('--block_index', type=int, default=0, choices=[0, 1])
+parser.add_argument('--subblock_relu_index', type=int, default=1, choices=[1, 2])
+parser.add_argument('--hidden_dim', type=int, default=10)
+parser.add_argument('--sigma_type', type=str, default='drelu', choices=['relu', 'drelu', 'smooth-drelu'])
+# hidden_dim
 args = parser.parse_args()
 
 
@@ -91,7 +95,8 @@ def main():
     torch.cuda.set_device(args.gpu)
 
     logfilename = os.path.join(args.outdir, args.logname)
-
+    for item in vars(args).items():
+        log(logfilename,f"{item[0].capitalize()}, {item[1]}")
     log(logfilename, "Hyperparameter List")
     log(logfilename, "Dataset: {:}".format(args.dataset))
     log(logfilename, "Architecture: {:}".format(args.arch))
@@ -113,12 +118,7 @@ def main():
 
     # Loading the base_classifier
     base_classifier = get_architecture(args.arch, args.dataset, device, args)
-    out_channels = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[1]
-    feature_size = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[-1]
-    from archs_unstructured.cifar_resnet import LearnableAlphaAndBetaNoSigmoidWithGammaDiffFromEye
-    base_classifier.get_submodule('layer1')[1].alpha2 = LearnableAlphaAndBetaNoSigmoidWithGammaDiffFromEye(out_channels, feature_size).to(device)
-
-    # LearnableAlphaAndBetaNoSigmoid
+    # out_channels = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[1]
     checkpoint = torch.load(args.savedir, map_location=device)
     """
     WARNING: I added strict=False here to handle the case that the base model does not contain parameters which we want
@@ -129,16 +129,6 @@ def main():
     original_acc = model_inference(base_classifier, test_loader,
                                     device, display=True)
     print(original_acc)
-    if args.block_type in ['LearnableAlphaAndBetaNewAlgorithm', 'LearnableAlphaBetaGamma']:
-        # new_lr = checkpoint['optimizer']['param_groups'][0]['lr']
-        # log(logfilename, f"Changing learning rate from {args.lr} to {new_lr}")
-        # args.lr = new_lr
-        for layer in [f'layer{i}' for i in range(1, 4 + 1)]:
-            for block_index in [0, 1]:
-                for alpha_index in [1, 2]:
-                    base_classifier.get_submodule(layer)[block_index].get_submodule(
-                        f'alpha{alpha_index}').set_default_params_beta_and_gamma()
-
     base_classifier.eval()
 
     log(logfilename, "Loaded the base_classifier")
@@ -147,51 +137,40 @@ def main():
     original_acc = model_inference(base_classifier, test_loader,
                                     device, display=True)
     log(logfilename, "Original Model Test Accuracy: {:.5}".format(original_acc))
-    # import ipdb; ipdb.set_trace()
-    # from collections import OrderedDict
-    # channel_id_to_num_activated_relus = OrderedDict({})
-    # layer_index = 0
-    # for name, param in base_classifier.named_parameters():
-    #     if 'alphas' in name:
-    #         channel_id_to_num_activated_relus[f"layer#{layer_index:02d}"] = OrderedDict({})
-    #         C, H, W = param.squeeze(0).shape
-    #         channel_id_to_num_activated_relus[f"layer#{layer_index:02d}"]['NUM_CAHNNELS'] = f"{C}"
-    #         channel_id_to_num_activated_relus[f"layer#{layer_index:02d}"]['CHANNEL_SHAPE'] = f"{H}x{W}"
-    #         for channel_index, channel in enumerate(param.squeeze(0)):
-    #             num_activated_relus = (channel > 0).float().sum()
-    #             if num_activated_relus > 0:
-    #                 channel_id_to_num_activated_relus[f"layer#{layer_index:02d}"][f"channel#{channel_index:03d}"] = int(num_activated_relus)
-    #                 print(f"(layer_index, channel): ({layer_index}, {channel_index}) -> {int(num_activated_relus)}")
-    #         layer_index += 1
-    # print(channel_id_to_num_activated_relus)
-    # import ipdb;
-    # ipdb.set_trace()
-    # import json
-    # with open('snl-15k-channel-id-to-num-activated-relus.json', 'w') as f:
-    #     json.dump(channel_id_to_num_activated_relus, f, indent=2)
+    relu_count = relu_counting(base_classifier, args)
+
+    log(logfilename, "Original ReLU Count: {}".format(relu_count))
+
     # Creating a fresh copy of network not affecting the original network.
     net = copy.deepcopy(base_classifier)
     net = net.to(device)
-    layer_index = 0
 
-
+    exec(
+        f'out_channels =net.get_submodule("layer{args.layer_index}")[{args.block_index}].alpha{args.subblock_relu_index}.alphas.shape[1]')
+    exec(
+        f'feature_size =net.get_submodule("layer{args.layer_index}")[{args.block_index}].alpha{args.subblock_relu_index}.alphas.shape[-1]')
+    # out_channels = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[1]
+    # feature_size = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[-1]
+    from archs_unstructured.cifar_resnet import ReLUAutoEncoder
+    # base_classifier.get_submodule('layer1')[1].alpha2 = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=10).to(device)
+    exec(
+        f'net.get_submodule("layer{args.layer_index}")[{args.block_index}].alpha{args.subblock_relu_index} = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=args.hidden_dim, sigma_type=args.sigma_type).to(device)')
+    # base_classifier.get_submodule('layer1')[1].alpha2 = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=10).to(
+    #     device)
 
     relu_count = relu_counting(net, args)
 
-    log(logfilename, "Original ReLU Count: {}".format(relu_count))
+    log(logfilename, "After AutoEncoder ReLU Count: {}".format(relu_count))
 
     # Line 12: Finetuing the network
     finetune_epoch = args.finetune_epochs
 
     # optimizer = SGD(net.parameters(),
     #                 lr=args.lr_beta, momentum=args.momentum, weight_decay=args.weight_decay)
-    optimizer = SGD([
-                {'params': [p for (name, p) in net.named_parameters() if name != 'layer1.1.alpha2.beta']},
-                {'params': net.layer1[1].alpha2.beta, 'lr': args.lr_beta}
-    ],
-                    lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
+    optimizer = SGD(net.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
     criterion = nn.CrossEntropyLoss().to(device)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[args.beta_epochs // 2, 3 * args.beta_epochs // 4], last_epoch=-1)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
     
     print("Finetuning the model")
     log(logfilename, "Finetuning the model")
@@ -203,50 +182,23 @@ def main():
     for name, param in net.named_parameters():
         if 'alphas' in name:
             param.requires_grad = False
-    for name, param in net.named_parameters():
-        if 'beta' in name:
-            param.requires_grad = True
-            print(name)
-    # for name, param in net.named_parameters():
-    #     if 'beta' not in name:
-    #         param.requires_grad = False
     best_top1 = 0
     for epoch in range(args.beta_epochs):
-        train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
-        import matplotlib.pyplot as plt
-        os.makedirs(os.path.join(args.outdir,  f'betas_viz/{epoch}/alphas'), exist_ok=True)
-        os.makedirs(os.path.join(args.outdir,  f'betas_viz/{epoch}/betas'), exist_ok=True)
-        os.makedirs(os.path.join(args.outdir, f'betas_viz/{epoch}/betas_images'), exist_ok=True)
-        os.makedirs(os.path.join(args.outdir,  f'betas_viz/{epoch}/betas_contrib'), exist_ok=True)
-        for idx, channel in enumerate(net.layer1[1].alpha2.beta):
-            import matplotlib.pyplot as plt
-            if (channel.cpu()).sum().item() != 0:
-                plt.close('all')
-                plt.title(f'alphas\nchannel# {idx:02d}')
-                plt.imshow(net.layer1[1].alpha2.alphas[0, idx].detach().cpu())
-                plt.colorbar()
-                plt.savefig(os.path.join(args.outdir, f'betas_viz/{epoch}/alphas/{idx}.png'))
-                plt.close('all')
-                plt.title(f'beta difference from eye matrix\nchannel# {idx:02d}')
-                plt.imshow((channel.cpu().detach() - torch.eye(channel.shape[0])).abs())
-                plt.colorbar()
-                plt.savefig(os.path.join(args.outdir, f'betas_viz/{epoch}/betas/{idx}.png'))
-                plt.close('all')
-                plt.title(f'betas contrib to other relus\nchannel# {idx:02d}')
-                plt.imshow(channel.cpu().sum(axis=0).reshape(32, 32).detach() - torch.diagonal(channel.cpu()).reshape(32,  32).detach())
-                plt.colorbar()
-                plt.savefig(os.path.join(args.outdir, f'betas_viz/{epoch}/betas_contrib/{idx}.png'))
-                os.makedirs(os.path.join(args.outdir, f'betas_viz/{epoch}/betas_images/channel{idx}/'), exist_ok=True)
-            for prototype_idx in range(channel.shape[0]):
-                if (channel.cpu().detach()[prototype_idx].reshape(32, 32)).sum() != 0:
-                    plt.close('all')
-                    is_it_an_snl_prototype =  net.layer1[1].alpha2.alphas[0, idx, prototype_idx // 32, prototype_idx % 32]
-                    plt.title(f'beta for prototype index: {prototype_idx:04d}\nchannel# {idx:02d}')
-                    plt.imshow(channel.cpu().detach()[prototype_idx].reshape(32, 32))
-                    plt.colorbar()
-                    plt.savefig(os.path.join(args.outdir, f'betas_viz/{epoch}/betas_images/channel{idx}/{prototype_idx}.png'))
-
+        # train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
+        train_loss, train_top1, train_top5 = train(train_loader, net, criterion, optimizer, epoch, device)
+        log(logfilename,
+            'Epoch [{epoch:03d}]]\t'
+            'Train Loss  ({loss:.4f})\t'
+            'Train Acc@1 ({top1:.3f})\t'
+            'Train Acc@5 ({top5:.3f})'.format(epoch=epoch,
+                loss=train_loss, top1=train_top1, top5=train_top5))
         test_loss, test_top1, test_top5 = test(test_loader, net, criterion, device, 100, display=True)
+        log(logfilename,
+            'Epoch [{epoch:03d}]]\t'
+            'Test Loss  ({loss:.4f})\t'
+            'Test Acc@1 ({top1:.3f})\t'
+            'Test Acc@5 ({top5:.3f})'.format(epoch=epoch,
+                                                 loss=test_loss, top1=test_top1, top5=test_top5))
         scheduler.step()
         
         if best_top1 < test_top1:

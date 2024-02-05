@@ -1,0 +1,1 @@
+python3 optimize_and_reduce_greedier.py $SNL_MODEL_CHECKPOINT_PATH $TEACHER_MODEL_CHECKPOINT_PATH $OUTPUT_DIR -d tiny_imagenet -r $REDUCE_THRESHOLD -e $RANDOM_TRIES -p $RELU_TARGET -l $STEP_REDUCE -f 5 

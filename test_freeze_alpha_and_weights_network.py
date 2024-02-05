@@ -142,12 +142,10 @@ def main():
     import matplotlib.pyplot as plt
 
 
-    root = 'alternating_alphas_and_betas'
+    root = 'alternating_alphas_and_betas_and_weights'
     os.makedirs(root, exist_ok=True)
     os.makedirs(os.path.join(root, 'layer1[0].alpha1'), exist_ok=True)
-    import ipdb;
-    ipdb.set_trace()
-    for layer in [f"layer{i}" for i in range(1, 1+4)]:
+    for layer in [f"layer{i}" for i in range(1, 1+4)][::-1]:
         for idx in [0, 1]:
             for alpha in [1, 2]:
                 os.makedirs(os.path.join(root, f'{layer}[{idx}].alpha{alpha}'), exist_ok=True)

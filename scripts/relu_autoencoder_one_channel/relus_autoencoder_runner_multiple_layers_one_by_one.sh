@@ -1,5 +1,5 @@
 echo $SIGMA_TYPE
-python3 snl_relu_autoencoder_multiple_layers.py $DATASET $ARCH $OUTDIR $INITIAL_CHECKPOINT \
+python3 snl_relu_autoencoder_multiple_layers_one_by_one.py $DATASET $ARCH $OUTDIR $INITIAL_CHECKPOINT \
     --block_type LearnableAlpha  --layer_name $LAYER_NAME --sigma_type $SIGMA_TYPE \
     --hidden_dim $HIDDEN_DIM  --learning-rate $LEARNING_RATE \
     --beta_epochs $BETA_EPOCHS --lr_beta $LR_BETA --relu_budget $RELU_BUDGET \

@@ -1,9 +1,9 @@
 export ARCH=resnet18_in
 export DATASET=cifar100
 export HIDDEN_DIM=10
-export OUTDIR=/local_code/relu_autoencoder_multiple_layers_all_at_once/relu_autoencoder_multiple_layers_all_at_once/smooth-drelu-layer-$LAYER_INDEX-block-$BLOCK_INDEX-subblock-$SUBBLOCK_RELU_INDEX-hiddendim-$HIDDEN_DIM
-export INITIAL_CHECKPOINT=/local_code/checkpoints/resnet18_cifar100.pth
-export BETA_EPOCHS=160
+export OUTDIR=/storage/jevnisek/snl/relu_autoencoder_multiple_layers_all_at_once/relu_autoencoder_multiple_layers_all_at_once/smooth-drelu-layer-$LAYER_INDEX-block-$BLOCK_INDEX-subblock-$SUBBLOCK_RELU_INDEX-hiddendim-$HIDDEN_DIM
+export INITIAL_CHECKPOINT=/storage/jevnisek/snl/pretrained_models/cifar100/resnet18_in/best_checkpoint.pth.tar
+export BETA_EPOCHS=100
 export LR_BETA=0.1
 export RELU_BUDGET=15000
 export FREEZE_ALPHAS_AND_WEIGHTS=true

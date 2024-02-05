@@ -14,3 +14,15 @@ docker_outputs
 cifar100-new-split
 cifar100-new-split-val
 output/
+/alternating_alphas_and_betas/
+/finetune_only_betas_one_channel/
+alternating_alphas_betas_and_gammas/
+my_try2/
+relu_autoencoder_one_channel/
+scripts/onr_logs/
+snl-15k-channel-id-to-num-activated-relus.json
+snl-with-betas-no-sigmoid/
+snl_alpha_and_weights_freeze_output/
+snl_alpha_freeze_output/
+tiny-imagenet-200/
+training_one_fc_layer_after_snl/

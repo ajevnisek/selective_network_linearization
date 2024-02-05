@@ -1,8 +1,8 @@
 export DATASET=cifar100
-export RELU_BUDGET=29000
+export RELU_BUDGET=20000
 export MODELDIR=/local_code/snl_output/cifar100/30000/snl_best_checkpoint_resnet18_in_cifar100_30000.pth.tar
-export SAVEDIR=/local_code/snl-with-betas-no-sigmoid/cifar100/$RELU_BUDGET/resnet18_in/
-export OUTDIR=/local_code/snl-with-betas-no-sigmoid/cifar100/$RELU_BUDGET/resnet18_in/
+export SAVEDIR=/storage/jevnisek/snl/outputs/snl-abc-squash/original_cifar100/$RELU_BUDGET_starts_from_30k/resnet18_in/
+export OUTDIR=/storage/jevnisek/snl/outputs/snl-abc-squash/original_cifar100/$RELU_BUDGET_starts_from_30k/resnet18_in/
 export ARCH=resnet18_in
 export FINETUNE_EPOCH=100
 export EPOCHS=2000

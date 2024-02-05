@@ -21,6 +21,8 @@ from math import ceil
 from train_utils import AverageMeter, accuracy, accuracy_list, init_logfile, log
 from utils import *
 import sys
+from archs_unstructured.cifar_resnet import ReLUAutoEncoder
+
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('dataset', type=str, choices=DATASETS)
@@ -64,9 +66,12 @@ parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
 parser.add_argument('--block_type', type=str, default='LearnableAlpha')
 parser.add_argument('--num_of_neighbors', type=int, default=4)
 parser.add_argument('--beta_epochs', type=int, default=5)
-parser.add_argument('--layer_index', type=int, default=1, choices=[1, 2, 3, 4])
-parser.add_argument('--block_index', type=int, default=0, choices=[0, 1])
-parser.add_argument('--subblock_relu_index', type=int, default=1, choices=[1, 2])
+parser.add_argument('--layer_name', type=str, nargs='+', default='layer1[1].alpha2', choices=[
+    f"layer{layer_index}[{block_index}].alpha{relu_index}"
+    for layer_index in range(1, 1+4)
+    for block_index in range(2)
+    for relu_index in range(1, 1 + 2)
+])
 parser.add_argument('--hidden_dim', type=int, default=10)
 parser.add_argument('--sigma_type', type=str, default='drelu', choices=['relu', 'drelu', 'smooth-drelu'])
 # hidden_dim
@@ -144,17 +149,21 @@ def main():
     # Creating a fresh copy of network not affecting the original network.
     net = copy.deepcopy(base_classifier)
     net = net.to(device)
-
-    exec(
-        f'out_channels =net.get_submodule("layer{args.layer_index}")[{args.block_index}].alpha{args.subblock_relu_index}.alphas.shape[1]')
-    exec(
-        f'feature_size =net.get_submodule("layer{args.layer_index}")[{args.block_index}].alpha{args.subblock_relu_index}.alphas.shape[-1]')
+    for layername in args.layer_name:
+        layer_index = int(layername.split('layer')[-1].split('[')[0])
+        block_index = int(layername.split('[')[-1].split(']')[0])
+        subblock_relu_index = int(layername.split('alpha')[-1])
+        print(layername, layer_index, block_index, subblock_relu_index)
+        exec(
+            f'out_channels =net.get_submodule("layer{layer_index}")[{block_index}].alpha{subblock_relu_index}.alphas.shape[1]')
+        exec(
+            f'feature_size =net.get_submodule("layer{layer_index}")[{block_index}].alpha{subblock_relu_index}.alphas.shape[-1]')
+        exec(
+            f'net.get_submodule("layer{layer_index}")[{block_index}].alpha{subblock_relu_index} = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=args.hidden_dim, sigma_type=args.sigma_type).to(device)')
     # out_channels = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[1]
     # feature_size = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[-1]
-    from archs_unstructured.cifar_resnet import ReLUAutoEncoder
     # base_classifier.get_submodule('layer1')[1].alpha2 = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=10).to(device)
-    exec(
-        f'net.get_submodule("layer{args.layer_index}")[{args.block_index}].alpha{args.subblock_relu_index} = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=args.hidden_dim, sigma_type=args.sigma_type).to(device)')
+
     # base_classifier.get_submodule('layer1')[1].alpha2 = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=10).to(
     #     device)
 
@@ -165,12 +174,12 @@ def main():
     # Line 12: Finetuing the network
     finetune_epoch = args.finetune_epochs
 
-    # optimizer = SGD(net.parameters(),
-    #                 lr=args.lr_beta, momentum=args.momentum, weight_decay=args.weight_decay)
-    optimizer = SGD(net.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
+    optimizer = SGD(net.parameters(),
+                    lr=args.lr_beta, momentum=args.momentum, weight_decay=args.weight_decay)
+    # optimizer = SGD(net.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
     criterion = nn.CrossEntropyLoss().to(device)
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[args.beta_epochs // 2, 3 * args.beta_epochs // 4], last_epoch=-1)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
+    # scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[args.beta_epochs // 2, 3 * args.beta_epochs // 4], last_epoch=-1)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
     
     print("Finetuning the model")
     log(logfilename, "Finetuning the model")
@@ -184,8 +193,8 @@ def main():
             param.requires_grad = False
     best_top1 = 0
     for epoch in range(args.beta_epochs):
-        # train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
-        train_loss, train_top1, train_top5 = train(train_loader, net, criterion, optimizer, epoch, device)
+        train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
+        # train_loss, train_top1, train_top5 = train(train_loader, net, criterion, optimizer, epoch, device)
         log(logfilename,
             'Epoch [{epoch:03d}]]\t'
             'Train Loss  ({loss:.4f})\t'
@@ -219,106 +228,6 @@ def main():
     log(logfilename, "After Beta optimization, Final best Prec@1 = {}%".format(best_top1))
     log(logfilename, "After Beta optimization, ReLU Count: {}".format(relu_count))
 
-
-    # '''
-    # This section optimizes the alpha parameters using snl.
-    # '''
-    # # Alpha is the masking parameters initialized to 1. Enabling the grad.
-    # for name, param in net.named_parameters():
-    #     if 'alpha' in name:
-    #         param.requires_grad = True
-    #
-    # for name, param in net.named_parameters():
-    #     if 'beta' in name:
-    #         param.requires_grad = False
-    #
-    #
-    # criterion = nn.CrossEntropyLoss().to(device)
-    # optimizer = Adam(net.parameters(), lr=args.lr_snl)
-    #
-    # # counting number of ReLU.
-    # total = relu_counting(net, args)
-    # if args.budegt_type == 'relative':
-    #     args.relu_budget = int(total * args.relu_budget)
-    #
-    # # Corresponds to Line 4-9
-    # lowest_relu_count, relu_count = total, total
-    # for epoch in range(args.epochs):
-    #
-    #     # Simultaneous tarining of w and alpha with KD loss.
-    #     train_loss = mask_train_kd_unstructured(train_loader, net, base_classifier, criterion, optimizer,
-    #                             epoch, device, alpha=args.alpha, display=False)
-    #     acc = model_inference(net, test_loader, device, display=False)
-    #
-    #     # counting ReLU in the neural network by using threshold.
-    #     relu_count = relu_counting(net, args)
-    #     log(logfilename, 'Epochs: {}\t'
-    #           'Test Acc: {}\t'
-    #           'Relu Count: {}\t'
-    #           'Alpha: {:.6f}\t'.format(
-    #               epoch, acc, relu_count, args.alpha
-    #           )
-    #           )
-    #
-    #     if relu_count < lowest_relu_count:
-    #         lowest_relu_count = relu_count
-    #
-    #     elif relu_count >= lowest_relu_count and epoch >= 5:
-    #         args.alpha *= 1.1
-    #
-    #     if relu_count <= args.relu_budget:
-    #         print("Current epochs breaking loop at {:}".format(epoch))
-    #         break
-    #
-    # log(logfilename, "After SNL Algorithm, the current ReLU Count: {}, rel. count:{}".format(relu_count, relu_count/total))
-    # log(logfilename, "Saving Model before fine-tuning to checkpoint...")
-    # torch.save({
-    #     'arch': args.arch,
-    #     'state_dict': net.state_dict(),
-    #     'optimizer': optimizer.state_dict(),
-    # }, os.path.join(args.outdir, f'snl_before_finetuning_checkpoint_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
-    # # Line 11: Threshold and freeze alpha
-    # for name, param in net.named_parameters():
-    #     if 'beta' in name:
-    #         param.requires_grad = False
-    #     if 'alpha' in name:
-    #         boolean_list = param.data > args.threshold
-    #         param.data = boolean_list.float()
-    #         param.requires_grad = False
-    #
-    #
-    # # Line 12: Finetuing the network
-    # finetune_epoch = args.finetune_epochs
-    #
-    # optimizer = SGD(net.parameters(), lr=args.lr_finetune, momentum=args.momentum, weight_decay=args.weight_decay)
-    # criterion = nn.CrossEntropyLoss().to(device)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
-    #
-    # print("Finetuning the model")
-    # log(logfilename, "Finetuning the model")
-    #
-    # best_top1 = 0
-    # for epoch in range(finetune_epoch):
-    #     train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
-    #     test_loss, test_top1, test_top5 = test(test_loader, net, criterion, device, 100, display=True)
-    #     scheduler.step()
-    #
-    #     if best_top1 < test_top1:
-    #         best_top1 = test_top1
-    #         is_best = True
-    #     else:
-    #         is_best = False
-    #
-    #     if is_best:
-    #         torch.save({
-    #                 'arch': args.arch,
-    #                 'state_dict': net.state_dict(),
-    #                 'optimizer': optimizer.state_dict(),
-    #         }, os.path.join(args.outdir, f'snl_best_checkpoint_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
-    #
-    # print("Final best Prec@1 = {}%".format(best_top1))
-    # log(logfilename, "Final best Prec@1 = {}%".format(best_top1))
-    #
 
 if __name__ == "__main__":
     main()

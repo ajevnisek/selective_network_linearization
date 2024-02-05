@@ -149,7 +149,8 @@ def main():
     # Creating a fresh copy of network not affecting the original network.
     net = copy.deepcopy(base_classifier)
     net = net.to(device)
-    for layername in args.layer_name:
+    for layername_idx, layername in enumerate(args.layer_name):
+        log(logfilename, f"[Iteration# {layername_idx}] Replacing {layername}...")
         layer_index = int(layername.split('layer')[-1].split('[')[0])
         block_index = int(layername.split('[')[-1].split(']')[0])
         subblock_relu_index = int(layername.split('alpha')[-1])
@@ -160,73 +161,67 @@ def main():
             f'feature_size =net.get_submodule("layer{layer_index}")[{block_index}].alpha{subblock_relu_index}.alphas.shape[-1]')
         exec(
             f'net.get_submodule("layer{layer_index}")[{block_index}].alpha{subblock_relu_index} = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=args.hidden_dim, sigma_type=args.sigma_type).to(device)')
-    # out_channels = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[1]
-    # feature_size = base_classifier.get_submodule('layer1')[1].alpha2.alphas.shape[-1]
-    # base_classifier.get_submodule('layer1')[1].alpha2 = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=10).to(device)
 
-    # base_classifier.get_submodule('layer1')[1].alpha2 = ReLUAutoEncoder(out_channels, feature_size, hidden_dim=10).to(
-    #     device)
+        relu_count = relu_counting(net, args)
 
-    relu_count = relu_counting(net, args)
+        log(logfilename, "After AutoEncoder ReLU Count: {}".format(relu_count))
 
-    log(logfilename, "After AutoEncoder ReLU Count: {}".format(relu_count))
+        # Line 12: Finetuing the network
+        finetune_epoch = args.finetune_epochs
 
-    # Line 12: Finetuing the network
-    finetune_epoch = args.finetune_epochs
+        optimizer = SGD(net.parameters(),
+                        lr=args.lr_beta, momentum=args.momentum, weight_decay=args.weight_decay)
+        # optimizer = SGD(net.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
+        criterion = nn.CrossEntropyLoss().to(device)
+        # scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[args.beta_epochs // 2, 3 * args.beta_epochs // 4], last_epoch=-1)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
 
-    optimizer = SGD(net.parameters(),
-                    lr=args.lr_beta, momentum=args.momentum, weight_decay=args.weight_decay)
-    # optimizer = SGD(net.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
-    criterion = nn.CrossEntropyLoss().to(device)
-    # scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[args.beta_epochs // 2, 3 * args.beta_epochs // 4], last_epoch=-1)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
-    
-    print("Finetuning the model")
-    log(logfilename, "Finetuning the model")
+        print("Finetuning the model")
+        log(logfilename, "Finetuning the model")
 
-    '''
-    This section optimizes the beta parameters.
-    '''
-    # Alpha is the masking parameters initialized to 1. Enabling the grad.
-    for name, param in net.named_parameters():
-        if 'alphas' in name:
-            param.requires_grad = False
-    best_top1 = 0
-    for epoch in range(args.beta_epochs):
-        train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
-        # train_loss, train_top1, train_top5 = train(train_loader, net, criterion, optimizer, epoch, device)
-        log(logfilename,
-            'Epoch [{epoch:03d}]]\t'
-            'Train Loss  ({loss:.4f})\t'
-            'Train Acc@1 ({top1:.3f})\t'
-            'Train Acc@5 ({top5:.3f})'.format(epoch=epoch,
-                loss=train_loss, top1=train_top1, top5=train_top5))
-        test_loss, test_top1, test_top5 = test(test_loader, net, criterion, device, 100, display=True)
-        log(logfilename,
-            'Epoch [{epoch:03d}]]\t'
-            'Test Loss  ({loss:.4f})\t'
-            'Test Acc@1 ({top1:.3f})\t'
-            'Test Acc@5 ({top5:.3f})'.format(epoch=epoch,
-                                                 loss=test_loss, top1=test_top1, top5=test_top5))
-        scheduler.step()
-        
-        if best_top1 < test_top1:
-            best_top1 = test_top1
-            is_best = True
-        else:
-            is_best = False
+        '''
+        This section optimizes the beta parameters.
+        '''
+        # Alpha is the masking parameters initialized to 1. Enabling the grad.
+        for name, param in net.named_parameters():
+            if 'alphas' in name:
+                param.requires_grad = False
+        best_top1 = 0
+        for epoch in range(args.beta_epochs):
+            train_loss, train_top1, train_top5 = train_kd(train_loader, net, base_classifier, optimizer, criterion, epoch, device)
+            # train_loss, train_top1, train_top5 = train(train_loader, net, criterion, optimizer, epoch, device)
+            log(logfilename,
+                'Epoch [{epoch:03d}]]\t'
+                'Train Loss  ({loss:.4f})\t'
+                'Train Acc@1 ({top1:.3f})\t'
+                'Train Acc@5 ({top5:.3f})'.format(epoch=epoch,
+                    loss=train_loss, top1=train_top1, top5=train_top5))
+            test_loss, test_top1, test_top5 = test(test_loader, net, criterion, device, 100, display=True)
+            log(logfilename,
+                'Epoch [{epoch:03d}]]\t'
+                'Test Loss  ({loss:.4f})\t'
+                'Test Acc@1 ({top1:.3f})\t'
+                'Test Acc@5 ({top5:.3f})'.format(epoch=epoch,
+                                                     loss=test_loss, top1=test_top1, top5=test_top5))
+            scheduler.step()
 
-        if is_best:
-            print(f'saving checkpoint to :{args.outdir}, acc: {best_top1}')
-            torch.save({
-                    'arch': args.arch,
-                    'state_dict': net.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-            }, os.path.join(args.outdir, f'betas_network_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
+            if best_top1 < test_top1:
+                best_top1 = test_top1
+                is_best = True
+            else:
+                is_best = False
 
-    print("Final best Prec@1 = {}%".format(best_top1))
-    log(logfilename, "After Beta optimization, Final best Prec@1 = {}%".format(best_top1))
-    log(logfilename, "After Beta optimization, ReLU Count: {}".format(relu_count))
+            if is_best:
+                print(f'saving checkpoint to :{args.outdir}, acc: {best_top1}')
+                torch.save({
+                        'arch': args.arch,
+                        'state_dict': net.state_dict(),
+                        'optimizer': optimizer.state_dict(),
+                }, os.path.join(args.outdir, f'iter_{layername_idx}_replacing_{layername}_betas_network_{args.arch}_{args.dataset}.pth.tar'))
+
+        print("Final best Prec@1 = {}%".format(best_top1))
+        log(logfilename, "After Beta optimization, Final best Prec@1 = {}%".format(best_top1))
+        log(logfilename, "After Beta optimization, ReLU Count: {}".format(relu_count))
 
 
 if __name__ == "__main__":

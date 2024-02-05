@@ -22,14 +22,15 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 import matplotlib.pyplot as plt
 from collections import OrderedDict
-CORRELATION_THRESHOLD = 0.9
+from analyze_distance_by_class import get_max_class_distance_matrix
+CORRELATION_THRESHOLD = 0.15
 CREATE_PLOT_ARTIFACTS = True
 
 def mul_iterable(iterable):
     result = 1
     if len(iterable) == 0:
         return result
-    return iterable[0] * mul(iterable[1:])
+    return iterable[0] * mul_iterable(iterable[1:])
 
 
 class MyNamespace:
@@ -64,8 +65,8 @@ my_args = MyNamespace(alpha=1e-05, arch='resnet18_in', batch=128, block_type='Le
                       print_freq=100, relu_budget=15000,
                       savedir='./checkpoints/resnet18_cifar100.pth', stride=1, threshold=0.01,
                       weight_decay=0.0005, workers=4,
-                      teacher_model_checkpoint_path="./checkpoints/resnet18_cifar100_new_split.pth",
-                      snl_model_checkpoint_path="./checkpoints/resnet18_cifar100_snl_finetune_final.pth",
+                      teacher_model_checkpoint_path="./checkpoints/resnet18_cifar100.pth",
+                      snl_model_checkpoint_path="./checkpoints/resnet18_cifar100_30000.pth",
                       experiment_root="./associate_prototypes/cifar100/resnet18_in",
                       visualizations_directory="fsp_like_alg/visualizations/",
                       checkpoints_directory="checkpoints/")
@@ -106,14 +107,14 @@ def get_input_activations_for_layer(model, data_loader, activation_in, layer_nam
 
 
 def associate_inducers_with_inducees(cosine_similarity, layername, snl_prototypes_indices):
-	layer_directory_path = os.path.join(my_args.experiment_root, my_args.visualizations_directory, layername)
+    layer_directory_path = os.path.join(my_args.experiment_root, my_args.visualizations_directory, layername)
 
     inducer_to_inducee = OrderedDict({})
     # handle the edge case of 'lone' inducers. That is, prototypes that are low correlated to all other prototypes
     for potential_inducer, current_similarity in enumerate(cosine_similarity):
         current_similarity_list = current_similarity.tolist()
         current_similarity_list[potential_inducer] = 0
-        if max(current_similarity_list) < CORRELATION_THRESHOLD:
+        if min(current_similarity_list) > CORRELATION_THRESHOLD:
             inducer_to_inducee[potential_inducer] = [potential_inducer]
             cosine_similarity[potential_inducer, ...] = np.nan
             cosine_similarity[..., potential_inducer] = np.nan
@@ -128,12 +129,13 @@ def associate_inducers_with_inducees(cosine_similarity, layername, snl_prototype
         curr_max = correlation_sum.argmax()
         if correlation_sum[curr_max] == -np.inf:
             break
-        inducees = np.where(cosine_similarity[curr_max] > CORRELATION_THRESHOLD)[0].tolist()
+        inducees = np.where(cosine_similarity[curr_max] < CORRELATION_THRESHOLD)[0].tolist()
         inducer_to_inducee[curr_max] = inducees
         for item in [curr_max] + inducees:
             cosine_similarity[item, ...] = np.nan
             cosine_similarity[..., item] = np.nan
 
+        """
         if iternum < 60:
             plt.close('all')
             plt.title(f'correlation sum vs prototype location\n{layername}')
@@ -172,6 +174,7 @@ def associate_inducers_with_inducees(cosine_similarity, layername, snl_prototype
             plt.ylabel('correlation matrix')
             os.makedirs(os.path.join(layer_directory_path, layername, 'correlation_mat', ), exist_ok=True)
             plt.savefig(os.path.join(layer_directory_path, layername, 'correlation_mat', f'iteration#{iternum:03d}.png'))
+        """
         iternum += 1
     return inducer_to_inducee
 
@@ -193,7 +196,7 @@ def finetune_student_model(student_model, teacher_model, train_loader, test_load
     finetune_epoch = epochs
     # finetune_epoch = 2
 
-    optimizer = SGD(student_model.parameters(), lr=1e-3, momentum=momentum, weight_decay=weight_decay)
+    optimizer = SGD(student_model.parameters(), lr=2e-4, momentum=momentum, weight_decay=weight_decay)
     criterion = nn.CrossEntropyLoss().to(device)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, finetune_epoch)
 
@@ -250,7 +253,7 @@ def load_snl_model(dataset=my_args.dataset):
 
     return snl_model
 
-def create_sparse_matrix(snl_prototypes_indices, inducer_to_inducee, matrix_size):
+def create_sparse_matrix(snl_prototypes_indices, inducer_to_inducee, sparse_matrix_size, original_feature_size):
     indices_for_sparse_matrix = [[], []]
     for inducer in inducer_to_inducee:
         inducer_location_in_feature_map = np.ravel_multi_index(
@@ -297,56 +300,32 @@ def create_plot_artifacts(cosine_similarity, layer_name, channels, rows, cols):
     plt.savefig(os.path.join(layer_directory_path, 'correlation_mat.png'))
 
 def process_layer(layer, block, relu_idx, snl_model, train_loader, activations_cache_loader, test_loader):
-	checkpoints_directory = os.path.join(my_args.experiment_root, my_args.checkpoints_directory)
-
     layer_name = f'{layer}_block{block}_relu{relu_idx}'
-                
-    # cache activations
-    curr_block_in = get_input_activations_for_layer(snl_model, activations_cache_loader, activation_in, layer, block, relu_idx)
+    checkpoints_directory = os.path.join(my_args.experiment_root, my_args.checkpoints_directory)
 
-    # print stats
-    nof_activated_channels = np.unique(
-            np.where((snl_model.get_submodule(layer_name)[block].get_submodule(
-            f'alpha{relu_idx}').alphas > my_args.threshold).cpu())[1])
-    print(f"activated channels: {nof_activated_channels}")
+    max_distance_matrix, snl_prototypes_indices = get_max_class_distance_matrix(layer, block, relu_idx, snl_model, activations_cache_loader, 100)
+    max_distance_matrix.fill_diagonal_(1)
 
-    """
-    As np.where returns a tuple of arrays for the given condition,
-    each array contains the index of the specific dimension, we need to skip the batch dimension and start taking all indices starting
-    from channel down to the end.
-    """
-    snl_prototypes_indices = np.where((snl_model.get_submodule(layer_name)[block].get_submodule(
-            f'alpha{relu_idx}').alphas > my_args.threshold).cpu())[1:]
-
-    # Access the responses based on the indices and map them from {0, 1} to {-1, 1}
-    prototypes_drelu = curr_block_in[..., snl_prototypes_indices[-3], snl_prototypes_indices[-2], snl_prototypes_indices[-1]]
-    prototypes_drelu = 2 * prototypes_drelu - 1
-
-    # we measure distance as the cosime similarity between two epochs.
-    # Two DReLUs are considered similar if their dot product is high:
-    cosine_similarity = normalize(prototypes_drelu.T) @ normalize(prototypes_drelu.T).T
-    if CREATE_PLOT_ARTIFACTS:
-        create_plot_artifacts(cosine_similarity, layer_name, snl_prototypes_indices[0], snl_prototypes_indices[1], snl_prototypes_indices[2])
-
-    print(f"layer {layer_name} has {cosine_similarity.shape[0]} SNL prototypes")
-
-    inducer_to_inducee = associate_inducers_with_inducees(cosine_similarity, layer_name, snl_prototypes_indices)
+    inducer_to_inducee = associate_inducers_with_inducees(max_distance_matrix.cpu().numpy(), layer_name, snl_prototypes_indices)
 
     print(f"Reduced the number of prototypes from {len(snl_prototypes_indices[0])} to {len(inducer_to_inducee)}")
 
-    original_feature_size = curr_block_in.shape[-3], curr_block_in.shape[-2], curr_block_in.shape[-1] # C x W x H
+    alphas = snl_model.get_submodule(layer)[block].get_submodule(f'alpha{relu_idx}'
+                                                                      ).alphas.cpu().detach()
+
+    original_feature_size = alphas.shape[-3], alphas.shape[-2], alphas.shape[-1] # C x W x H
     sparse_matrix_size = (mul_iterable(original_feature_size), mul_iterable(original_feature_size)) # (C x W x H) x (C x W x H)
 
-    sparse_matrix = create_sparse_matrix(snl_prototypes_indices, inducer_to_inducee, sparse_matrix_size)
+    sparse_matrix = create_sparse_matrix(snl_prototypes_indices, inducer_to_inducee, sparse_matrix_size, original_feature_size)
 
     inducers_mask = torch.zeros((original_feature_size))
     for inducer in inducer_to_inducee:
         inducers_mask[snl_prototypes_indices[0][inducer], snl_prototypes_indices[1][inducer], snl_prototypes_indices[2][inducer]] = 1.0
 
     # Replace the alphas component with the InducedReLU block with the choosing matrix embedded within it.
-    alphas = snl_model.get_submodule(layer_name)[block].get_submodule(f'alpha{relu_idx}'
+    alphas = snl_model.get_submodule(layer)[block].get_submodule(f'alpha{relu_idx}'
                                                                       ).alphas.cpu().detach()
-    setattr(snl_model.get_submodule(layer_name)[block], f'alpha{relu_idx}',
+    setattr(snl_model.get_submodule(layer)[block], f'alpha{relu_idx}',
             InducedLearnableAlpha(alphas.cuda(), inducers_mask.cuda(), sparse_matrix.cuda()))
 
     original_acc = model_inference(snl_model, test_loader,
@@ -362,18 +341,21 @@ def process_layer(layer, block, relu_idx, snl_model, train_loader, activations_c
 
 
 def main():
-
-	create_experiment_directories()
+    create_experiment_directories()
 
     train_loader, val_loader, test_loader = get_data_loaders()
 
     activations_cache_loader = val_loader
 
     if val_loader is None:
-        activations_cache_loader = test_loader
+        activations_cache_loader = train_loader
 
     snl_model = load_snl_model()
     snl_model.eval()
+
+    for name, param in snl_model.named_parameters():
+        if 'alpha' in name:
+            param.requires_grad = False
 
     original_acc = model_inference(snl_model, test_loader,
                                    device, display=True)
@@ -386,4 +368,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main(args)
+    main()

@@ -31,6 +31,10 @@ parser.add_argument('--gpu', default=0, type=int,
 parser.add_argument('--print-freq', default=100, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--stride', type=int, default=1, help='conv1 stride')
+parser.add_argument("-t", "--threshold", type=float, default=0.01, help='the threshold for alphas')
+parser.add_argument("-k", "--block_type", type=str, default="LearnableAlpha", help='the block type to use in the SNL routine')
+parser.add_argument("-n", "--num_of_neighbors", type=int, default=4, help='where applicable, the number of neighbors for a ReLU pruning routine')
+parser.add_argument("-f", "--finetune_epochs", type=int, default=20, help='number of epochs for finetune in case the accuracy dropped by some threshold')
 args = parser.parse_args()
 
 
@@ -55,8 +59,11 @@ def main():
     # Loading the base_classifier
     base_classifier = get_architecture(args.arch, args.dataset, device, args)
     checkpoint = torch.load(args.savedir, map_location=device)
-    base_classifier.load_state_dict(checkpoint['state_dict'])
+    base_classifier.load_state_dict(checkpoint['state_dict'], strict=False)
     base_classifier.eval()
+    
+    import pdb
+    pdb.set_trace()
 
     print("Loaded the base_classifier")
 

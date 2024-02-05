@@ -94,7 +94,7 @@ def train(loader: DataLoader, model: torch.nn.Module, criterion, optimizer: Opti
 
     return (losses.avg, top1.avg, top5.avg)
 
-def train_kd(train_loader, nets_student, nets_teacher, optimizer, criterion, epoch, device):
+def train_kd(train_loader, nets_student, nets_teacher, optimizer, criterion, epoch, device, outdir=''):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
@@ -127,6 +127,19 @@ def train_kd(train_loader, nets_student, nets_teacher, optimizer, criterion, epo
 
         optimizer.zero_grad()
         total_loss.backward()
+        if i % 50 == 0:
+            import os
+            if outdir:
+                os.makedirs(os.path.join(outdir, f'grads/epoch{epoch:02d}/iter#{i:03d}/'), exist_ok=True)
+                for idx, channel in enumerate(nets_student.layer1[1].alpha2.beta.grad):
+                    import matplotlib.pyplot as plt
+                    if channel.sum().item() > 0:
+                        plt.close('all')
+                        plt.title(f'beta gradient, grad_sum={channel.sum().item()}')
+                        plt.imshow(channel.cpu())
+                        plt.colorbar()
+                        plt.savefig(os.path.join(outdir, f'grads/epoch{epoch:02d}/iter#{i:03d}/channel#{idx:02d}.png'))
+
         optimizer.step()
         batch_time.update(time.time() - end)
         end = time.time()
@@ -203,7 +216,7 @@ def test(loader: DataLoader, model: torch.nn.Module, criterion, device, print_fr
 
         return (losses.avg, top1.avg, top5.avg)
 
-def model_inference(base_classifier, loader, device, display=False, print_freq=100):
+def model_inference(base_classifier, loader, device, display=False, print_freq=100, outputs_list=None):
     print_freq = 100
     top1 = AverageMeter()
     top5 = AverageMeter()
@@ -213,6 +226,10 @@ def model_inference(base_classifier, loader, device, display=False, print_freq=1
     # Regular dataset:
     with torch.no_grad():
         for i, (inputs, targets) in enumerate(loader):
+
+            if outputs_list is not None:
+                outputs_list.append(targets)
+                
             inputs = inputs.to(device)
             targets = targets.to(device)
             outputs = base_classifier(inputs)

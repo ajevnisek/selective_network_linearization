@@ -8,8 +8,8 @@ LOGNAME=resnet18_in_unstructured_with_betas_$RELU_BUDGET.txt
 #SAVEDIR=./snl_output/cifar100/LearnableAlphaAndBeta/$RELU_BUDGET/$ARCH/
 
 THRESHOLD=1e-2
-ALPHA=1e-5
+ALPHA=1e-4
 BATCH=128
-BLOCK_TYPE=LearnableAlphaAndBetaNewAlgorithm
+BLOCK_TYPE=LearnableAlphaBetaGammaWithSquash
 python3 snl_finetune_unstructured_additional_parameters.py "$DATASET" "$ARCH" "$SAVEDIR" "$MODELDIR" --relu_budget $RELU_BUDGET --alpha $ALPHA --lr $LR --threshold $THRESHOLD --batch $BATCH --logname "$LOGNAME" --finetune_epochs $FINETUNE_EPOCH --block_type "$BLOCK_TYPE"
 

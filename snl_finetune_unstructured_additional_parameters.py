@@ -74,6 +74,27 @@ def relu_counting(net, args):
     return relu_count
 
 
+def get_pretrained_network(args, device):
+    base_classifier = get_architecture(args.arch, args.dataset, device, args)
+    checkpoint = torch.load(args.savedir, map_location=device)
+    """
+    WARNING: I added strict=False here to handle the case that the base model does not contain parameters which we want
+    to selectively learn.
+    """
+    base_classifier.load_state_dict(checkpoint['state_dict'], strict=False)
+    if args.block_type in ['LearnableAlphaAndBetaNewAlgorithm', 'LearnableAlphaBetaGamma',
+                           'LearnableAlphaBetaGammaWithSquash']:
+        # new_lr = checkpoint['optimizer']['param_groups'][0]['lr']
+        # log(logfilename, f"Changing learning rate from {args.lr} to {new_lr}")
+        # args.lr = new_lr
+        for layer in [f'layer{i}' for i in range(1, 4 + 1)]:
+            for block_index in [0, 1]:
+                for alpha_index in [1, 2]:
+                    base_classifier.get_submodule(layer)[block_index].get_submodule(
+                        f'alpha{alpha_index}').set_default_params_beta_and_gamma()
+    return base_classifier
+
+
 def main():
     if not os.path.exists(args.outdir):
         os.makedirs(args.outdir)
@@ -103,22 +124,7 @@ def main():
 
 
     # Loading the base_classifier
-    base_classifier = get_architecture(args.arch, args.dataset, device, args)
-    checkpoint = torch.load(args.savedir, map_location=device)
-    """
-    WARNING: I added strict=False here to handle the case that the base model does not contain parameters which we want
-    to selectively learn.
-    """
-    base_classifier.load_state_dict(checkpoint['state_dict'], strict=False)
-    if args.block_type in ['LearnableAlphaAndBetaNewAlgorithm', 'LearnableAlphaBetaGamma']:
-        # new_lr = checkpoint['optimizer']['param_groups'][0]['lr']
-        # log(logfilename, f"Changing learning rate from {args.lr} to {new_lr}")
-        # args.lr = new_lr
-        for layer in [f'layer{i}' for i in range(1, 4 + 1)]:
-            for block_index in [0, 1]:
-                for alpha_index in [1, 2]:
-                    base_classifier.get_submodule(layer)[block_index].get_submodule(
-                        f'alpha{alpha_index}').set_default_params_beta_and_gamma()
+    base_classifier = get_pretrained_network(args, device)
 
     base_classifier.eval()
 
@@ -130,7 +136,11 @@ def main():
     log(logfilename, "Original Model Test Accuracy: {:.5}".format(original_acc))
 
     # Creating a fresh copy of network not affecting the original network.
-    net = copy.deepcopy(base_classifier)
+    if args.block_type == 'LearnableAlphaBetaGammaWithSquash':
+        net = get_pretrained_network(args, device)
+    else:
+        net = copy.deepcopy(base_classifier)
+
     net = net.to(device)
 
     relu_count = relu_counting(net, args)

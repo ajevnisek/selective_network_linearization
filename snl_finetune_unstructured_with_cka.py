@@ -21,6 +21,8 @@ from math import ceil
 from train_utils import AverageMeter, accuracy, accuracy_list, init_logfile, log
 from utils import *
 import sys
+from centered_kernel_analysis import linear_CKA_pytorch
+
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('dataset', type=str, choices=DATASETS)
@@ -39,6 +41,8 @@ parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                     help='initial learning rate', dest='lr')
 parser.add_argument('--alpha', default=1e-5, type=float,
                     help='Lasso coefficient')
+parser.add_argument('--alpha_cka', default=1e-5, type=float,
+                    help='Centered Kernel Analysis coefficient')
 parser.add_argument('--threshold', default=1e-2, type=float)
 parser.add_argument('--budegt_type', default='absolute', type=str, choices=['absolute', 'relative'])
 parser.add_argument('--relu_budget', default=50000, type=int)
@@ -82,6 +86,7 @@ def main():
     log(logfilename, "Finetune Epochs: {:}".format(args.finetune_epochs))
     log(logfilename, "Learning Rate: {:}".format(args.lr))
     log(logfilename, "Alpha: {:}".format(args.alpha))
+    log(logfilename, "Alpha CKA: {:}".format(args.alpha_cka))
     log(logfilename, "ReLU Budget: {:}".format(args.relu_budget))
 
     train_dataset = get_dataset(args.dataset, 'train')
@@ -130,11 +135,22 @@ def main():
 
     # Corresponds to Line 4-9
     lowest_relu_count, relu_count = total, total
+    LAYERNAMES = ['layer1[0].alpha1', 'layer1[0].alpha2',
+                  'layer1[1].alpha1', 'layer1[1].alpha2',
+                  'layer2[0].alpha1', 'layer2[0].alpha2',
+                  'layer2[1].alpha1', 'layer2[1].alpha2',
+                  'layer3[0].alpha1', 'layer3[0].alpha2',
+                  'layer3[1].alpha1', 'layer3[1].alpha2',
+                  'layer4[0].alpha1', 'layer4[0].alpha2',
+                  'layer4[1].alpha1', 'layer4[1].alpha2']
+    pairs = [(p0, p1) for (p0, p1) in zip(LAYERNAMES[:-1], LAYERNAMES[1:])]
+    print(f'evaluating cka between the following pairs: {pairs}')
     for epoch in range(args.epochs):
         
         # Simultaneous tarining of w and alpha with KD loss.
-        train_loss = mask_train_kd_unstructured(train_loader, net, base_classifier, criterion, optimizer,
-                                epoch, device, alpha=args.alpha, display=False)
+        train_loss = mask_train_kd_unstructured_with_cka(train_loader, net, base_classifier, criterion, optimizer,
+                                                         epoch, device, alpha=args.alpha, alpha_cka=args.alpha_cka,
+                                                         pairs=pairs, display=False)
         acc = model_inference(net, test_loader, device, display=False)
 
         # counting ReLU in the neural network by using threshold.
@@ -158,7 +174,11 @@ def main():
             break
 
     log(logfilename, "After SNL Algorithm, the current ReLU Count: {}, rel. count:{}".format(relu_count, relu_count/total))
-
+    torch.save({
+        'arch': args.arch,
+        'state_dict': net.state_dict(),
+        'optimizer': optimizer.state_dict(),
+    }, os.path.join(args.outdir, f'snl_before_finetune_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
     # Line 11: Threshold and freeze alpha
     for name, param in net.named_parameters():
         if 'alpha' in name:

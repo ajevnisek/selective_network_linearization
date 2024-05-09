@@ -158,6 +158,11 @@ def main():
             break
 
     log(logfilename, "After SNL Algorithm, the current ReLU Count: {}, rel. count:{}".format(relu_count, relu_count/total))
+    torch.save({
+        'arch': args.arch,
+        'state_dict': net.state_dict(),
+        'optimizer': optimizer.state_dict(),
+    }, os.path.join(args.outdir, f'snl_before_finetune_{args.arch}_{args.dataset}_{args.relu_budget}.pth.tar'))
 
     # Line 11: Threshold and freeze alpha
     for name, param in net.named_parameters():

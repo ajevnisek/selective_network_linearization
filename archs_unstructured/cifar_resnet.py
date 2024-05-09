@@ -66,10 +66,16 @@ class LearnableAlpha(nn.Module):
     def __init__(self, out_channel, feature_size):
         super(LearnableAlpha, self).__init__()
         self.alphas = nn.Parameter(torch.ones(1, out_channel, feature_size, feature_size), requires_grad=True)
+        self.cache = None
 
     def forward(self, x):
-        out = F.relu(x) * self.alphas.expand_as(x) + (1-self.alphas.expand_as(x)) * x 
+        out = F.relu(x) * self.alphas.expand_as(x) + (1-self.alphas.expand_as(x)) * x
+        self.cache = out
         return out
+
+    def get_cache(self):
+        return self.cache
+
 
 class BasicBlock(nn.Module):
     expansion = 1

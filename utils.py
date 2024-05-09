@@ -361,6 +361,106 @@ def mask_train_kd_unstructured(loader: DataLoader, model: torch.nn.Module, model
 
     return losses.avg
 
+from centered_kernel_analysis import kernel_CKA_pytorch
+
+def split_layername_to_triplet(layername):
+    layer_index = int(layername.split('layer')[-1].split('[')[0])
+    block_index = int(layername.split('[')[-1].split(']')[0])
+    subblock_relu_index = int(layername.split('alpha')[-1])
+    return layer_index, block_index, subblock_relu_index
+
+
+def get_activation_drelu(name, cache_dict):
+    def hook(model, input, output):
+        if name not in cache_dict:
+            cache_dict[name] = [(input[0] > 0).detach().cpu().byte()]
+        else:
+            cache_dict[name].append((input[0] > 0).detach().cpu().byte())
+
+    return hook
+
+def get_activation_output(name, cache_dict):
+    def hook(model, input, output):
+        cache_dict[name] = output
+    return hook
+
+
+def mask_train_kd_unstructured_with_cka(loader: DataLoader, model: torch.nn.Module, model_teacher: torch.nn.Module, criterion,
+                               optimizer: Optimizer,
+                               epoch: int, device, alpha, alpha_cka, pairs, display=False):
+    losses = AverageMeter()
+
+    # switch to train mode
+    model.train()
+    model_teacher.eval()
+    FEATURES_CACHE_DICT = {}
+
+    criterion_kd = SoftTarget(4.0).to(device)
+
+    hooks = []
+    for pair in pairs:
+        layer_name, block, relu_idx = split_layername_to_triplet(pair[0])
+        hook_out = model.get_submodule(f"layer{layer_name}")[block].get_submodule(
+            f'alpha{relu_idx}').register_forward_hook(
+            get_activation_output(f'{pair[0]}', FEATURES_CACHE_DICT))
+        hooks.append(hook_out)
+
+    layer_name, block, relu_idx = split_layername_to_triplet(pairs[-1][1])
+    last_hook = model.get_submodule(f"layer{layer_name}")[block].get_submodule(
+        f'alpha{relu_idx}').register_forward_hook(
+        get_activation_output(f'{pairs[-1][1]}', FEATURES_CACHE_DICT))
+    hooks.append(last_hook)
+
+
+
+    for i, (inputs, targets) in enumerate(loader):
+        # name_to_alpha_param = {}
+        # for pair in pairs:
+        #     for name, param in model.named_parameters():
+        #         if 'alpha' in name and pair[0].replace('[', '.').replace(']', '') in name:
+        #             name_to_alpha_param[pair[0]] = param
+        #         if 'alpha' in name and pair[1].replace('[', '.').replace(']', '') in name:
+        #             name_to_alpha_param[pair[1]] = param
+
+        inputs = inputs.to(device)
+        targets = targets.to(device)
+
+        reg_loss = 0
+        for name, param in model.named_parameters():
+            if 'alpha' in name:
+                reg_loss += torch.norm(param, p=1)
+        # compute output
+        outputs = model(inputs)
+        outputs_t = model_teacher(inputs)
+
+        cka_loss = 0
+        for pair in pairs:
+            # cka_loss += kernel_CKA_pytorch(FEATURES_CACHE_DICT[pair[0]].flatten(1) * name_to_alpha_param[pair[0]].flatten(1),
+            #                                FEATURES_CACHE_DICT[pair[1]].flatten(1) * name_to_alpha_param[pair[1]].flatten(1))
+            # cka_loss -= kernel_CKA_pytorch(
+            #     FEATURES_CACHE_DICT[pair[0]].flatten(1) * name_to_alpha_param[pair[0]].flatten(1),
+            #     targets.unsqueeze(1).float())
+
+            cka_loss += kernel_CKA_pytorch(
+                FEATURES_CACHE_DICT[pair[0]].flatten(1),
+                FEATURES_CACHE_DICT[pair[1]].flatten(1))
+            cka_loss -= kernel_CKA_pytorch(
+                FEATURES_CACHE_DICT[pair[0]].flatten(1),
+                targets.unsqueeze(1).float())
+
+        loss = criterion(outputs, targets) + criterion_kd(outputs, outputs_t) + alpha * reg_loss + alpha_cka * cka_loss
+
+        losses.update(loss.item(), inputs.size(0))
+
+        # compute gradient and do SGD step
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    for hook in hooks:
+        hook.remove()
+    return losses.avg
+
 
 class CosineAnnealingAlpha():
     def __init__(self, T_max, eta_min=0):

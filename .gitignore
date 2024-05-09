@@ -5,3 +5,5 @@ pretrained_models
 snl_output/
 *.pkl
 checkpoints
+.idea
+docker_outputs/
